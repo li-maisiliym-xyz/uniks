@@ -1,0 +1,28 @@
+[workspace]
+members = [ "niks" ]
+
+[package]
+name = "uniks"
+version = "0.0.1"
+authors = ["li <@li:maisiliym.xyz>"]
+edition = "2018"
+
+[features]
+default = [  ]
+
+[dependencies.serde]
+version = "*"
+features = [ "derive" ]
+
+[dependencies.async-trait]
+version = "*"
+
+[dependencies.async-std]
+version = "*"
+features = [ "attributes", "serde" ]
+path = "/git/github.com/async-rs/async-std"
+
+[dependencies.niks]
+version = "*"
+features = []
+path = "./niks"
