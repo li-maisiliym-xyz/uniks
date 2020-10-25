@@ -13,14 +13,19 @@ default = [  ]
 [dependencies.serde]
 version = "*"
 features = [ "derive" ]
+git = "file:///git/github.com/serde-rs/serde"
+branch = "master"
 
 [dependencies.async-trait]
 version = "*"
+git = "file:///git/github.com/dtolnay/async-trait"
+branch = "master"
 
 [dependencies.async-std]
 version = "*"
 features = [ "attributes", "serde" ]
-path = "/git/github.com/async-rs/async-std"
+git = "file:///git/github.com/async-rs/async-std"
+branch = "serde"
 
 [dependencies.niks]
 version = "*"
