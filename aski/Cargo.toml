@@ -1,0 +1,25 @@
+[package]
+name = "askio"
+version = "0.0.1"
+authors = ["li <@li:maisiliym.xyz>"]
+workspace = ".."
+edition = "2018"
+
+[features]
+
+[dependencies.async-std]
+version = "*"
+features = [ "attributes", "serde" ]
+git = "file:///git/github.com/async-rs/async-std"
+branch = "serde"
+
+[dependencies.serde]
+version = "*"
+features = [ "derive" ]
+git = "file:///git/github.com/serde-rs/serde"
+branch = "master"
+
+[dependencies.ron]
+version = "*"
+git = "file:///git/github.com/ron-rs/ron"
+branch = "serde"

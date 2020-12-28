@@ -1,0 +1,15 @@
+[package]
+name = "astra"
+version = "0.1.0"
+authors = ["li <@li:maisiliym.uniks>"]
+edition = "2018"
+
+[dependencies.uniks]
+version = "*"
+features = []
+path = "../"
+
+[dependencies.krios]
+version = "*"
+features = []
+path = "../../sajban/krios"

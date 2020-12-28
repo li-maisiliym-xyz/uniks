@@ -1,5 +1,5 @@
 [workspace]
-members = [ "niks" ]
+members = [ "astra", "flo", "hob", "nixrs", "niks" ]
 
 [package]
 name = "uniks"
@@ -9,6 +9,16 @@ edition = "2018"
 
 [features]
 default = [  ]
+
+[dependencies.sajban]
+version = "*"
+features = []
+path = "../sajban"
+
+[dependencies.niks]
+version = "*"
+features = []
+path = "./niks"
 
 [dependencies.serde]
 version = "*"
@@ -26,8 +36,3 @@ version = "*"
 features = [ "attributes", "serde" ]
 git = "file:///git/github.com/async-rs/async-std"
 branch = "serde"
-
-[dependencies.niks]
-version = "*"
-features = []
-path = "./niks"
