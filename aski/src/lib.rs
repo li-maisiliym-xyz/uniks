@@ -1,4 +1,4 @@
-#![crate_name = "askio"]
+#![crate_name = "aski"]
 #![crate_type = "rlib"]
 
 use {
@@ -12,11 +12,15 @@ use {
 
 #[derive(Serialize, Deserialize)]
 pub enum Aski {
-  Spek(Spek),
+  Askiom(Askiom),
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct Spek { }
+pub struct Askiom { }
+
+impl Askiom {
+    async fn niu() { }
+}
 
 impl TryFrom<&Path> for Aski { 
   type Error = Error;

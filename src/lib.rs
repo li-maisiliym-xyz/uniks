@@ -37,13 +37,14 @@ impl IuniksStatys {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct IuniksMap {
-    stor: HashMap<Iuniks, IuniksStatys>,
+pub struct IuniksStor {
+    storPath: Box<Path>,
+    statysMap: HashMap<Iuniks, IuniksStatys>,
 }
 
-impl IuniksMap {
+impl IuniksStor {
     pub fn niu() -> Self {
-        IuniksMap {
+        IuniksStor {
             stor: HashMap::new(),
         }
     }
