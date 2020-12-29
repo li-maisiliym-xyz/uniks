@@ -4,3 +4,4 @@
 https://github.com/irrustible/futures-micro
 https://github.com/librelois/fast-threadpool
 https://github.com/zesterer/flume (fast-threadpool dep)
+https://github.com/tokio-rs/io-uring
