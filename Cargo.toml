@@ -1,5 +1,5 @@
 [workspace]
-members = [ "astra", "flo", "hob", "nixrs", "niks" ]
+members = [ "astra", "flo", "hob", "nixrs", "floniks", "aski", "askiom_derive" ]
 
 [package]
 name = "uniks"
@@ -14,11 +14,6 @@ default = [  ]
 version = "*"
 features = []
 path = "../sajban"
-
-[dependencies.niks]
-version = "*"
-features = []
-path = "./niks"
 
 [dependencies.serde]
 version = "*"
