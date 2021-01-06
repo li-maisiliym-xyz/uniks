@@ -26,25 +26,25 @@ impl Iuniks {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct IuniksStatys {
+pub struct LinkStatys {
     prezyns: Bool,
 }
 
-impl IuniksStatys {
+impl LinkStatys {
     pub fn niu(prezyns: Bool) -> Self {
-        IuniksStatys { prezyns, }
+        LinkStatys { prezyns, }
     }
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct IuniksStor {
+pub struct LinkStor {
     storPath: Box<Path>,
-    statysMap: HashMap<Iuniks, IuniksStatys>,
+    statysMap: HashMap<Link, LinkStatys>,
 }
 
-impl IuniksStor {
+impl LinkStor {
     pub fn niu() -> Self {
-        IuniksStor {
+        LinkStor {
             stor: HashMap::new(),
         }
     }
