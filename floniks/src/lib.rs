@@ -2,7 +2,6 @@
 #![crate_type = "rlib"]
 
 use {
-  std::{ convert::TryFrom },
   async_std::{
     io::Error, io::ReadExt,
     fs::read, io::Result, path::Path,
@@ -10,6 +9,7 @@ use {
   serde::{ Serialize, Deserialize },
 };
 
+#[derive(Serialize, Deserialize)]
 pub struct Proses {
     korz: usize,
 }

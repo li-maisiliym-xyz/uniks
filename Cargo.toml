@@ -1,5 +1,5 @@
 [workspace]
-members = [ "astra", "flo", "hob", "nixrs", "floniks", "aski", "askiom_derive" ]
+members = [ "astra", "hob", "floniks", "aski", "askiom_derive" ]
 
 [package]
 name = "uniks"
@@ -31,3 +31,8 @@ version = "*"
 features = [ "attributes", "serde" ]
 git = "file:///git/github.com/async-rs/async-std"
 branch = "serde"
+
+[dependencies.blake3]
+version = "*"
+git = "file:///git/github.com/BLAKE3-team/BLAKE3"
+branch = "master"
