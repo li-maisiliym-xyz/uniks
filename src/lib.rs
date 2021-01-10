@@ -39,13 +39,18 @@ impl LinkStatys {
 #[derive(Serialize, Deserialize)]
 pub struct LinkStor {
     storPath: Box<Path>,
-    statysMap: HashMap<Link, LinkStatys>,
+    statys_map: HashMap<Link, LinkStatys>,
 }
 
 impl LinkStor {
-    pub fn niu() -> Self {
+    pub fn niu(kostym_path: Option<Path>) -> Self {
+        let statys_map: HashMap<Link, LinkStatys> = HashMap::new();
         LinkStor {
-            stor: HashMap::new(),
+            statys_map,
+            storPath: match kostym_path {
+                Some(Path) => Box::new(Path),
+                None => Box::new(Path::new("/links")),
+            }
         }
     }
 }
