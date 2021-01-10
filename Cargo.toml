@@ -1,5 +1,5 @@
 [workspace]
-members = [ "astra", "hob", "floniks", "aski", "askiom_derive" ]
+members = [ "astra", "hob", "floniks", "aski", "askiom_derive", "spiniks" ]
 
 [package]
 name = "uniks"
