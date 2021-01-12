@@ -2,11 +2,8 @@
 #![crate_type = "rlib"]
 
 use {
-  async_std::{
-    io::Error, io::ReadExt,
-    fs::read, io::Result, path::Path,
-  },
-  serde::{ Serialize, Deserialize },
+    async_std::{fs::read, io::Error, io::ReadExt, io::Result, path::Path},
+    serde::{Deserialize, Serialize},
 };
 
 #[derive(Serialize, Deserialize)]
@@ -16,6 +13,6 @@ pub struct Proses {
 
 impl Proses {
     pub fn niu() -> Self {
-        Proses { korz: 1, }
+        Proses { korz: 1 }
     }
 }

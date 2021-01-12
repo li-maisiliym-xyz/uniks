@@ -2,31 +2,28 @@
 #![crate_type = "bin"]
 
 use {
-    krios::{ PriKriom, Kriom, Kriod },
-    uniks::{ IuniksMap, },
+    krios::{Kriod, Kriom, PriKriom},
+    uniks::IuniksMap,
 };
-
 
 #[derive(Serialize, Deserialize)]
 pub struct Astra {
     kriod: Kriod,
     praim_kriom: Kriom,
-    raizyn: Raizyn
+    raizyn: Raizyn,
 }
 
 impl Astra {
     pub fn niu() -> Self {
-        Astra {  }
+        Astra {}
     }
 }
 
-pub struct Raizyn {
-    
-}
+pub struct Raizyn {}
 
 impl Raizyn {
     pub fn niu() -> Self {
-        Raizyn {  }
+        Raizyn {}
     }
 }
 
@@ -42,5 +39,4 @@ pub fn main() {
         Ok(astra) => astra,
         Err(e) => Astra::init(),
     };
-
 }

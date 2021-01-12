@@ -3,15 +3,15 @@
 
 use {
     async_std::{
-        path::{ Path, PathBuf },
-        os::unix::fs::symlink,
         io::Error,
+        os::unix::fs::symlink,
+        path::{Path, PathBuf},
     },
-    serde::{ Deserialize, Serialize },
     async_trait::async_trait,
-    std::collections::HashMap,
-    blake3::{ Hash, Hasher },
+    blake3::{Hash, Hasher},
     sajban::Link,
+    serde::{Deserialize, Serialize},
+    std::collections::HashMap,
 };
 
 #[derive(Serialize, Deserialize)]
@@ -22,7 +22,7 @@ pub enum Iuniks {
 }
 
 impl Iuniks {
-    pub fn niu(link: Link) -> Self { }
+    pub fn niu(link: Link) -> Self {}
 }
 
 #[derive(Serialize, Deserialize)]
@@ -32,7 +32,7 @@ pub struct LinkStatys {
 
 impl LinkStatys {
     pub fn niu(prezyns: Bool) -> Self {
-        LinkStatys { prezyns, }
+        LinkStatys { prezyns }
     }
 }
 
@@ -50,7 +50,7 @@ impl LinkStor {
             storPath: match kostym_path {
                 Some(Path) => Box::new(Path),
                 None => Box::new(Path::new("/links")),
-            }
+            },
         }
     }
 }
