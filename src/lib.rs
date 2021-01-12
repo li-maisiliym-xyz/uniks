@@ -38,7 +38,7 @@ impl LinkStatys {
 
 #[derive(Serialize, Deserialize)]
 pub struct LinkStor {
-    storPath: Box<Path>,
+    stor_path: Box<Path>,
     statys_map: HashMap<Link, LinkStatys>,
 }
 
@@ -47,9 +47,9 @@ impl LinkStor {
         let statys_map: HashMap<Link, LinkStatys> = HashMap::new();
         LinkStor {
             statys_map,
-            storPath: match kostym_path {
+            stor_path: match kostym_path {
                 Some(Path) => Box::new(Path),
-                None => Box::new(Path::new("/links")),
+                None => Box::new(Path::new("/stor")),
             },
         }
     }
