@@ -22,4 +22,4 @@ branch = "serde"
 version = "*"
 features = [ "attributes", "serde" ]
 git = "file:///git/github.com/async-rs/async-std"
-branch = "serde"
+branch = "maisiliym/dev/serde"
