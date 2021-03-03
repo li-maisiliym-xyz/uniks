@@ -1,4 +1,4 @@
-#![crate_name = "aski"]
+#![crate_name = "aski_mentci"]
 #![crate_type = "rlib"]
 
 use {

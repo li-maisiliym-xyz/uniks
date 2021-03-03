@@ -15,14 +15,15 @@ use {
 };
 
 #[derive(Serialize, Deserialize)]
-pub enum Iuniks {
-    Nixpkgs(Link),
-    HomeManager(Link),
+pub enum Uniks {
     Onspesyfaid(Link),
+    RustModz(Link),
 }
 
-impl Iuniks {
-    pub fn niu(link: Link) -> Self {}
+impl Uniks {
+    pub fn niu() -> Self {
+        Uniks::Onspesyfaid
+    }
 }
 
 #[derive(Serialize, Deserialize)]

@@ -3,7 +3,7 @@
 
 use {
     async_std::{fs::read, io::Result, path::Path, task::block_on},
-    std::collections::HashMap,
+    std::{collections::HashMap, env::args},
 };
 
 #[derive(Serialize, Deserialize)]

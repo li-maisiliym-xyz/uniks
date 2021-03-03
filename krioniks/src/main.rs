@@ -1,4 +1,4 @@
-#![crate_name = "astra"]
+#![crate_name = "krioniks"]
 #![crate_type = "bin"]
 
 use {
