@@ -21,11 +21,11 @@ pub enum System {
     #[serde(rename = "i686-linux")]
     I686,
     #[serde(rename = "aarch64-linux")]
-    AARCH64,
+    Aarch64,
     #[serde(rename = "armv7l-linux")]
-    ARMV7L,
+    Armv7l,
     #[serde(rename = "avr-linux")]
-    AVR,
+    Avr,
 }
 
 impl StructuredAttrs {
