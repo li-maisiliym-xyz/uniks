@@ -1,3 +1,6 @@
+#![crate_name = "niks"]
+#![crate_type = "lib"]
+
 use {
     async_std::{fs::read, io::Result, path::Path},
     serde_json::Value,
