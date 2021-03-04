@@ -3,5 +3,5 @@
 
 #[derive(Serialize, Deserialize)]
 pub enum Iuniks {
-    Niovi(Niovi),
+    NioviTri(NioviTri),
 }
