@@ -1,11 +1,10 @@
 {
   description = "uniks";
 
-  outputs = { self, mkCargoNix }: {
-    datom = mkCargoNix.datom {
-      cargoNixPath = self + /Cargo.nix;
-      nightly = true;
+  outputs = { self }: {
+    SobUyrld = {
+      modz = [ "uyrld" ];
+      lamdy = import ./lamdy.nix;
     };
-
   };
 }
