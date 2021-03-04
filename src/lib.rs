@@ -6,7 +6,7 @@ pub use {
         fs::read,
         io::Error,
         io::Result,
-        main as async_main,
+        main,
         os::unix::fs::symlink,
         path::{Path, PathBuf},
     },
@@ -31,11 +31,11 @@ impl Uniks {
 
 #[derive(Serialize, Deserialize)]
 pub struct LinkStatys {
-    prezyns: Bool,
+    prezyns: bool,
 }
 
 impl LinkStatys {
-    pub fn niu(prezyns: Bool) -> Self {
+    pub fn niu(prezyns: bool) -> Self {
         LinkStatys { prezyns }
     }
 }
@@ -47,7 +47,7 @@ pub struct LinkStor {
 }
 
 impl LinkStor {
-    pub fn niu(kostym_path: Option<Path>) -> Self {
+    pub fn niu(datom: Box<Datom>) -> Self {
         let statys_map: HashMap<Link, LinkStatys> = HashMap::new();
         LinkStor {
             statys_map,
