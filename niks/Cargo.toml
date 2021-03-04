@@ -1,16 +1,13 @@
 [package]
-name = "krioniks"
+name = "niks"
 version = "0.1.0"
 authors = ["li <@li:maisiliym.uniks>"]
 edition = "2018"
+
+[features]
+default = [  ]
 
 [dependencies.uniks]
 version = "*"
 features = []
 path = "../"
-
-[dependencies.krios]
-version = "*"
-features = []
-git = "file:///home/li/dev/sajban"
-branch = "mein"
