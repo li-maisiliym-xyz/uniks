@@ -1,9 +1,12 @@
 #![crate_name = "uniks"]
 #![crate_type = "lib"]
 
-use {
+pub use {
     async_std::{
+        fs::read,
         io::Error,
+        io::Result,
+        main as async_main,
         os::unix::fs::symlink,
         path::{Path, PathBuf},
     },

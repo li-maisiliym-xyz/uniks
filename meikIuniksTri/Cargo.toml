@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies.iuniks]
 version = "*"
 features = []
-path = "../iuniks"
+path = "../niks"
 
 [dependencies.niks]
 version = "*"

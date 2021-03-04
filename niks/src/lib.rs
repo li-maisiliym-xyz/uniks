@@ -2,9 +2,8 @@
 #![crate_type = "lib"]
 
 use {
-    async_std::{fs::read, io::Result, path::Path},
     serde_json::Value,
-    std::collections::HashMap,
+    uniks::{read, HashMap, Path, Result},
 };
 
 #[derive(serde::Serialize, serde::Deserialize)]
