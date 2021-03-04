@@ -35,4 +35,8 @@ branch = "master"
 version = "*"
 features = [ "attributes", "serde" ]
 git = "file:///git/github.com/async-rs/async-std"
-branch = "maisiliym/dev/serde"
+branch = "serde"
+
+[dependencies.serde]
+version = "*"
+features = [ "std", "derive" ]
