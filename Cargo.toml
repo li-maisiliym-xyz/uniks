@@ -37,6 +37,12 @@ features = [ "attributes", "serde" ]
 git = "file:///git/github.com/async-rs/async-std"
 branch = "serde"
 
+[dependencies.key-vec]
+version = "*"
+git = "file:///git/gitlab.com/spearman/key-vec"
+branch = "master"
+features = [ "serde" ]
+
 [dependencies.serde]
 version = "*"
 features = [ "std", "derive" ]

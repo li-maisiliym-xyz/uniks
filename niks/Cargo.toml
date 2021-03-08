@@ -11,3 +11,7 @@ default = [  ]
 version = "*"
 features = []
 path = "../"
+
+[dependencies.serde]
+version = "*"
+features = [ "std", "derive" ]

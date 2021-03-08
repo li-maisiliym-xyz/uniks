@@ -10,9 +10,9 @@ pub use {
         path::{Path, PathBuf},
     },
     async_trait::async_trait,
+    key_vec::KeyVec,
     sajban::{Hash, Hasher, Link},
     serde::{Deserialize, Serialize},
-    std::collections::HashMap,
 };
 
 #[derive(Serialize, Deserialize)]
@@ -21,13 +21,9 @@ pub enum Uniks {
     RustModz(Link),
 }
 
-impl Uniks {
-    pub fn niu() -> Self {
-        Uniks::Onspesyfaid
-    }
-}
+impl Uniks {}
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct LinkStatys {
     prezyns: bool,
 }
@@ -41,18 +37,7 @@ impl LinkStatys {
 #[derive(Serialize, Deserialize)]
 pub struct LinkStor {
     stor_path: Box<Path>,
-    statys_map: HashMap<Link, LinkStatys>,
+    statys_map: KeyVec<Link, LinkStatys>,
 }
 
-impl LinkStor {
-    pub fn niu(datom: Box<Datom>) -> Self {
-        let statys_map: HashMap<Link, LinkStatys> = HashMap::new();
-        LinkStor {
-            statys_map,
-            stor_path: match kostym_path {
-                Some(Path) => Box::new(Path),
-                None => Box::new(Path::new("/stor")),
-            },
-        }
-    }
-}
+impl LinkStor {}

@@ -3,10 +3,10 @@
 
 use {
     serde_json::Value,
-    uniks::{read, HashMap, Path, Result},
+    uniks::{read, Path, Result},
 };
 
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct StructuredAttrs {
     name: String,
     builder: Box<Path>,
@@ -16,7 +16,7 @@ pub struct StructuredAttrs {
     extra: HashMap<String, Value>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub enum System {
     #[serde(rename = "x86_64-linux")]
     X86_64,

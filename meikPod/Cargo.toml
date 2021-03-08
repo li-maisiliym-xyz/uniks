@@ -13,3 +13,9 @@ path = ".."
 version = "*"
 features = []
 path = "../niks"
+
+[dependencies.async-std]
+version = "*"
+features = [ "attributes", "serde" ]
+git = "file:///git/github.com/async-rs/async-std"
+branch = "serde"
