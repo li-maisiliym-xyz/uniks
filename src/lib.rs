@@ -13,6 +13,7 @@ pub use {
     key_vec::KeyVec,
     sajban::{Hash, Hasher, Link},
     serde::{Deserialize, Serialize},
+    tinystr::TinyStr16 as String,
 };
 
 #[derive(Serialize, Deserialize)]
@@ -41,3 +42,13 @@ pub struct LinkStor {
 }
 
 impl LinkStor {}
+
+#[derive(Serialize, Deserialize)]
+pub enum Pod {
+    Iuzyr(IuzyrPod),
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct IuzyrPod {
+    neim: tinyStr16,
+}

@@ -1,10 +1,11 @@
 #![crate_name = "meikPod"]
 #![crate_type = "bin"]
 
-use niks::StructuredAttrs;
+use niks::{StructuredAttrs, Value};
+use uniks::{IuzyrPod, Pod};
 
 #[async_std::main]
 async fn main() {
-    let attrs = StructuredAttrs::get().await.unwrap();
-    let pri_pod = ();
+    let input = StructuredAttrs::get().await.unwrap();
+    let pod: Pod = ();
 }

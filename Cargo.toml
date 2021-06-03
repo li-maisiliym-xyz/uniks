@@ -46,3 +46,6 @@ features = [ "serde" ]
 [dependencies.serde]
 version = "*"
 features = [ "std", "derive" ]
+
+[dependencies.tinystr]
+version = "*"

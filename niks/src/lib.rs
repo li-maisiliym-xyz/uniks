@@ -3,10 +3,11 @@
 
 use {
     serde::{Deserialize, Serialize},
-    serde_json::Value,
-    std::{collections::HashMap, env::args},
     uniks::{read, Path, Result},
 };
+
+pub use serde_json::Value;
+pub use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct StructuredAttrs {
@@ -15,7 +16,7 @@ pub struct StructuredAttrs {
     system: System,
 
     #[serde(flatten)]
-    extra: HashMap<String, Value>,
+    attrs: HashMap<String, Value>,
 }
 
 #[derive(Serialize, Deserialize)]
