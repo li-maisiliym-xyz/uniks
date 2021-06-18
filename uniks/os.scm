@@ -1,5 +1,4 @@
 (define-module (uniks os))
-
 (use-modules (maisiliym) ; hak
 	     (oop goops)
 	     (srfi srfi-1)
@@ -22,14 +21,14 @@
 	     (gnu packages admin)
 	     (gnu packages networking)  
 	     (gnu packages suckless)
+	     (gnu packages wm)
 	     (gnu packages linux)
 	     (gnu packages shells)
 	     (gnu packages dvtm)
              (gnu packages abduco)
 	     (gnu packages rsync)
              (gnu packages rust-apps)
-	     (gnu packages cryptsetup)
-	     )
+	     (gnu packages cryptsetup))
 
 (define (remove-services services unwanted-services)
   (remove
@@ -81,5 +80,6 @@
 	(list (file-append inetutils "/bin/ping")
 	      (file-append inetutils "/bin/ping6"))))
     (append
-     (list (file-append iputils "/bin/ping"))
+     (list (file-append iputils "/bin/ping")
+	   (file-append swaylock "/bin/swaylock"))
      (remove-members %setuid-programs %unwanted-setuid-programs))))

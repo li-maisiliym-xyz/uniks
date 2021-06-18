@@ -1,3 +1,4 @@
+(define-module (uniks krimyn))
 (use-modules (home)
              (home ssh)
              (home profile)
@@ -44,13 +45,14 @@
              (gnu packages fontutils)
              (gnu packages version-control)
              (gnu packages rust-apps))
+(export (->home))
 
 (define (newline-strings strings)
   (string-join strings "\n" 'prefix))
 
 (define (shell-set-env env-value-pairs)
   (define (export-env env-value-pair)
-=    (format #f "export ~a=~a"
+    (format #f "export ~a=~a"
 	    (car env-value-pair) (car (cdr env-value-pair))))
   (newline-strings (map export-env env-value-pairs)))
 
@@ -130,7 +132,14 @@
 (define wofi-style-file
   (local-file "wofi/style.css"))
 
-(define-method (->home (krimyn <kimyn>) (neksis <neksis>) (metaneksis <metaneksis>))
+(define-method ->home (krimyn <krimyn>)
+  (->home (<-krimyn last-raizyn krimyn)))
+
+(define-method (->home (raizyn <raizyn>))
+  (define krimyn (->kimyn raizyn))
+  (define neksys (->neksys raizyn))
+  (define metaneksys (->metaneksys raizyn))
+  
   (define data-directory (string-append "/home/." (->neim krimyn)))
   
   (define (data-mirror path)
@@ -147,7 +156,7 @@
        ("init"
 	(("defaultBranch" "mein"))) 
        ("user"
-	(("email" ,(->email krimyn metaneksis))
+	(("email" ,(->email krimyn metaneksys))
 	 ("name" ,(->neim krimyn))
 	 ("signingKey" ,(string-append "&" (->keygrip krimyn)))))
        ("ghq"

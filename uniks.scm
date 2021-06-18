@@ -5,6 +5,9 @@
 	 <neksys>))
 
 (define-class <raizyn> ()
+  (metaneksiz #:init-keyword #:metaneksiz
+	      #:getter ->metaneksiz
+	      #:setter <-metaneksiz)
   (metaneksys #:init-keyword #:metaneksys
 	      #:getter ->metaneksys
 	      #:setter <-metaneksys)
