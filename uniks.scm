@@ -42,9 +42,10 @@
   (saiz #:init-keyword #:saiz
 	#:getter ->saiz
 	#:setter <-saiz)
-  (prikriom #:init-keyword #:prikriom
-	    #:getter ->prikriom
-	    #:setter <-prikriom))
+  (prikriomz #:init-keyword #:prikriomz
+	     ;; #:type (alist-of (<neksys-neim> . <prikriom)>)
+	     #:getter ->prikriomz
+	     #:setter <-prikriomz))
 
 (define-class <neksys> ()
   (neim #:init-keyword #:neim
