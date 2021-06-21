@@ -1,8 +1,8 @@
 (define-module (uniks))
 (use-modules (oop goops))
-(export (<prikriom> <krimyn>
+(export <prikriom> <krimyn>
 	 <raizyn> <metaneksys>
-	 <neksys>))
+	 <neksys>)
 
 (define-class <raizyn> ()
   (metaneksiz #:init-keyword #:metaneksiz
@@ -16,7 +16,13 @@
 	  #:setter <-neksys)
   (krimyn #:init-keyword #:krimyn
 	  #:getter ->krimyn
-	  #:setter <-krimyn))
+	  #:setter <-krimyn)
+  (neksiz #:init-keyword #:neksiz
+	  #:getter ->neksiz
+	  #:setter <-neksiz)
+  (krimynz #:init-keyword #:krimynz
+	   #:getter ->krimynz
+	   #:setter <-krimynz))
 
 (define-class <prikriom> ()
   (ful #:init-keyword #:ful
@@ -62,10 +68,7 @@
 	#:setter <-saiz)
   (prikriom #:init-keyword #:prikriom
 	    #:getter ->prikriom
-	    #:setter <-prikriom)
-  (krimynz #:init-keyword #:krimynz
-	   #:getter ->krimynz
-	   #:setter <-krimynz))
+	    #:setter <-prikriom))
 
 (define-class <metaneksys> ()
   (neim #:init-keyword #:neim
@@ -73,10 +76,7 @@
 	#:setter <-neim)
   (trost #:init-keyword #:trost
 	 #:getter ->trost
-	 #:setter <-trost)
-  (neksiz #:init-keyword #:neksiz
-	  #:getter ->neksiz
-	  #:setter <-neksiz))
+	 #:setter <-trost) )
 
 (define-method (->prikriom (krimyn <krimyn>)
 			   (neksys-neim <string>))
