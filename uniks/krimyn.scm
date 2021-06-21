@@ -5,6 +5,7 @@
              (home utils)
              (home bash)
              (home zsh)
+	     (raizyn)
              (giiks)
              (oop goops)
              (ice-9 format)
@@ -107,6 +108,8 @@
   (define krimyn (->kimyn raizyn))
   (define neksys (->neksys raizyn))
   (define metaneksys (->metaneksys raizyn))
+  (define neksys-neim (->neim neksys))
+  (define prikriom (->prikriom krimyn neksys-neim))
   
   (define data-directory (string-append "/home/." (->neim krimyn)))
   
@@ -114,7 +117,7 @@
     (symlink-file-home (string-append data-directory path) path))
 
   (define sshcontrol-file 
-    (mixed-text-file "sshcontrol" (->keygrip krimyn)))
+    (mixed-text-file "sshcontrol" (->keygrip prikriom)))
 
   (define gitconfig-file
     (make-ini-file
@@ -126,7 +129,7 @@
        ("user"
 	(("email" ,(->email krimyn metaneksys))
 	 ("name" ,(->neim krimyn))
-	 ("signingKey" ,(string-append "&" (->keygrip krimyn)))))
+	 ("signingKey" ,(string-append "&" (->keygrip prikriom)))))
        ("ghq"
 	(("root" "/git")))
        ("github"

@@ -54,6 +54,9 @@
   (spici #:init-keyword #:spici
 	 #:getter ->spici
 	 #:setter <-spici)
+  (trost #:init-keyword #:trost
+	 #:getter ->trost
+	 #:setter <-trost)
   (saiz #:init-keyword #:saiz
 	#:getter ->saiz
 	#:setter <-saiz)
@@ -62,24 +65,20 @@
 	    #:setter <-prikriom)
   (krimynz #:init-keyword #:krimynz
 	   #:getter ->krimynz
-	   #:setter <-krimynz)
-  (keygrip #:init-keyword #:keygrip
-	   #:getter ->keygrip
-	   #:setter <-keygrip))
+	   #:setter <-krimynz))
 
 (define-class <metaneksys> ()
   (neim #:init-keyword #:neim
 	#:getter ->neim
 	#:setter <-neim)
-  (spici #:init-keyword #:spici
-	 #:getter ->spici
-	 #:setter <-spici)
-  (saiz #:init-keyword #:saiz
-	#:getter ->saiz
-	#:setter <-saiz)
-  (prikriom #:init-keyword #:prikriom
-	    #:getter ->prikriom
-	    #:setter <-prikriom)
+  (trost #:init-keyword #:trost
+	 #:getter ->trost
+	 #:setter <-trost)
   (neksiz #:init-keyword #:neksiz
 	  #:getter ->neksiz
 	  #:setter <-neksiz))
+
+(define-method (->prikriom (krimyn <krimyn>)
+			   (neksys-neim <string>))
+  (define prikriomz (->prikrioms krimyn))
+  (assq-ref prikriomz neksys-neim))
