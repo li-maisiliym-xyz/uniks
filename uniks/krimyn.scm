@@ -5,7 +5,6 @@
              (home utils)
              (home bash)
              (home zsh)
-	     (raizyn)
              (giiks)
              (oop goops)
              (ice-9 format)

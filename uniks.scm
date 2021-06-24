@@ -79,6 +79,16 @@
 	 #:setter <-trost) )
 
 (define-method (->prikriom (krimyn <krimyn>)
-			   (neksys-neim <string>))
-  (define prikriomz (->prikrioms krimyn))
+			   (neksys <neksys>))
+  (define prikriomz (->prikriomz krimyn))
+  (define neksys-neim (->neim neksys))
   (assq-ref prikriomz neksys-neim))
+
+(define-method (->os-user (krimyn <krimyn>))
+  (#f))
+
+(define-method (->os-users (krimynz <list>))
+  (map ->os-user krimynz))
+
+(define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
+  (#f))

@@ -1,5 +1,6 @@
 (define-module (uniks os))
-(use-modules (maisiliym) ; hak
+(use-modules (uniks)
+	     (uniks os)
 	     (oop goops)
 	     (srfi srfi-1)
 	     (guix gexp)
@@ -85,3 +86,38 @@
      (list (file-append iputils "/bin/ping")
 	   (file-append swaylock "/bin/swaylock"))
      (remove-members %setuid-programs %unwanted-setuid-programs))))
+
+(define ssh-service
+  (define authorized-keys
+    (->authorized-keys neksys krimynz))
+  (service openssh-service-type
+	   (openssh-configuration
+	    (openssh openssh-sans-x)
+	    (password-authentication? #false)
+	    (permit-root-login 'without-password)
+	    (authorized-keys authorized-keys))))
+
+(define-method (->os (rairyn <raizyn>))
+  (operating-sy
+   stem
+  (locale "en_US.utf8")
+  (timezone "Asia/Bangkok")
+  (kernel-arguments (cons "intel_pstate=disable" %default-kernel-arguments))
+  (keyboard-layout (keyboard-layout "us" "colemak"))
+  (host-name (->neim neksys))
+  (users (append (->os-users krimynz)
+		 %base-user-accounts))
+  (packages
+   (append
+    %uniks-base-packages
+    (list
+     (specification->package "nss-certs")
+     sway swayidle swaylock brightnessctl
+     font-google-material-design-icons
+     alsa-utils adb)))
+  (services
+   (cons* ssh-service %edj-services))
+  (setuid-programs %uniks-setuid-programs)
+  (bootloader (->bootloader neksys))
+  (swap-devices (->swap-devices neksys))
+  (file-systems (cons* (->file-systems neksys) %base-file-systems))))
