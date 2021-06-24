@@ -42,23 +42,25 @@
 
 (define %wanted-desktop-services
   (append
-   (list (service sddm-service-type))
+   (list
+    (service sddm-service-type)
+    (service thermald-service-type))
    (remove-services %desktop-services %unwanted-desktop-services)))
 
 (define-public %edj-services
   (modify-services
-   %wanted-desktop-services
-   (guix-service-type
-    config =>
-    (guix-configuration
-     (inherit config)
-     (substitute-urls
-      (append
-       %guix-substitute-urls %default-substitute-urls))
-     (authorized-keys
-      (append
-       %guix-authorized-keys %default-authorized-guix-keys))
-     (extra-options '("--max-jobs=2"))))))
+      %wanted-desktop-services
+    (guix-service-type
+     config =>
+     (guix-configuration
+      (inherit config)
+      (substitute-urls
+       (append
+	%guix-substitute-urls %default-substitute-urls))
+      (authorized-keys
+       (append
+	%guix-authorized-keys %default-authorized-guix-keys))
+      (extra-options '("--max-jobs=2"))))))
 
 (define (remove-members list unwanted-list)
   (remove
