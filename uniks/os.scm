@@ -5,6 +5,7 @@
 	     (guix gexp)
 	     (gnu services)
 	     (gnu services base)
+	     (gnu services pm)
 	     (gnu services desktop)  
 	     (gnu services shepherd)
 	     (gnu services sddm)
@@ -44,7 +45,11 @@
   (append
    (list
     (service sddm-service-type)
-    (service thermald-service-type))
+    (service thermald-service-type)
+    (service tlp-service-type
+             (tlp-configuration
+	      (cpu-scaling-governor-on-bat '("powersave"))
+              (cpu-scaling-governor-on-ac '("powersave")))))
    (remove-services %desktop-services %unwanted-desktop-services)))
 
 (define-public %edj-services
@@ -85,3 +90,4 @@
      (list (file-append iputils "/bin/ping")
 	   (file-append swaylock "/bin/swaylock"))
      (remove-members %setuid-programs %unwanted-setuid-programs))))
+
