@@ -1,6 +1,5 @@
 (define-module (uniks os))
-(use-modules (maisiliym) ; hak
-	     (oop goops)
+(use-modules (oop goops)
 	     (srfi srfi-1)
 	     (guix gexp)
 	     (gnu services)
