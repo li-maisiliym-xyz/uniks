@@ -5,10 +5,12 @@
    (name 'giiks)
    (url "https://github.com/maisiliym/giiks")
    (branch "alfa")
+   (commit
+    "9e9102ca244ce6c85a652a2a405d50de42230c91")
    (introduction
     (channel-introduction
      (version 0)
-     (commit "a8883b58dc82e167c96506cf05095f37c2c2c6cd")
+     (commit "13ac24ac8477e842c3611f32972f73f26d1d3f7b")
      (signer "775A 7994 B5A7 0AD5 2D7E  B03B EE38 5D17 F4AD 0223"))))
   (channel
    (name 'guix-home-manager)
