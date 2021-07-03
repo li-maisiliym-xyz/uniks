@@ -1,5 +1,6 @@
 (define-module (uniks os))
-(use-modules (oop goops)
+(use-modules (raizyn)
+	     (oop goops)
 	     (srfi srfi-1)
 	     (guix gexp)
 	     (gnu services)
