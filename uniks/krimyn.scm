@@ -5,7 +5,6 @@
              (home utils)
              (home bash)
              (home zsh)
-	     (raizyn)
              (giiks)
              (oop goops)
              (ice-9 format)
@@ -14,7 +13,7 @@
              (guix derivations)
              (guix git-download)
              (guix gexp))
-(export (->home))
+(export ->home)
 
 (define (newline-strings strings)
   (string-join strings "\n" 'prefix))
