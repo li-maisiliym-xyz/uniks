@@ -1,6 +1,18 @@
 (channel
  (version 0)
  (dependencies
+  ;; HAK
+  (channel
+   (name raizyn)
+   (url "https://github.com/maisiliym/maisiliym")
+   (branch "mein")
+   (commit
+    "709b30bd06e6562e121643fd106ee2c861f1e94e")
+   (introduction
+    (make-channel-introduction
+     "10362ca5c2044f91a4626948fd3a85b0ea6327e5"
+     (openpgp-fingerprint
+      "775A 7994 B5A7 0AD5 2D7E  B03B EE38 5D17 F4AD 0223"))))
   (channel
    (name giiks)
    (url "https://github.com/maisiliym/giiks")
