@@ -6,7 +6,8 @@
 	     (gnu services)
 	     (gnu services base)
 	     (gnu services pm)
-	     (gnu services desktop)  
+	     ((gnu services desktop)
+	      #:select (%desktop-services) #:prefix guix:)
 	     (gnu services shepherd)
 	     (gnu services sddm)
 	     (gnu services xorg)
@@ -37,35 +38,36 @@
      (member (service-kind service) unwanted-services))
    services))
 
-(define %unwanted-desktop-services
+(define %unwanted-guix-desktop-services
   (list avahi-service-type
 	gdm-service-type))
 
-(define %wanted-desktop-services
-  (append
-   (list
-    (service sddm-service-type)
-    (service thermald-service-type)
-    (service tlp-service-type
-             (tlp-configuration
-	      (cpu-scaling-governor-on-bat '("powersave"))
-              (cpu-scaling-governor-on-ac '("powersave")))))
-   (remove-services %desktop-services %unwanted-desktop-services)))
-
-(define-public %edj-services
+(define %modified-guix-desktop-services
   (modify-services
-      %wanted-desktop-services
+      (remove-services guix:%desktop-services %unwanted-guix-desktop-services)
     (guix-service-type
      config =>
      (guix-configuration
       (inherit config)
       (substitute-urls
        (append
-	%guix-substitute-urls %default-substitute-urls))
+	%guix-substitute-urls ; To be removed
+	(->substitute-urls metaneksys)))
       (authorized-keys
        (append
 	%guix-authorized-keys %default-authorized-guix-keys))
       (extra-options '("--max-jobs=2"))))))
+
+(define %edj-services
+  (append
+   %modified-guix-desktop-services
+   (list
+    (service sddm-service-type)
+    (service thermald-service-type)
+    (service tlp-service-type
+             (tlp-configuration
+	      (cpu-scaling-governor-on-bat '("powersave"))
+              (cpu-scaling-governor-on-ac '("powersave")))))))
 
 (define (remove-members list unwanted-list)
   (remove
