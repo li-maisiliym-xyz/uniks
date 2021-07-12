@@ -307,7 +307,6 @@
    emacs-company
    emacs-selectrum
    emacs-posframe
-   emacs-ctrlf
    emacs-orderless
    emacs-consult
    emacs-embark
@@ -318,7 +317,7 @@
    emacs-git-gutter
    emacs-expand-region
    emacs-multiple-cursors-dev
-   emacs-phi-search emacs-phi-search-mc
+   emacs-phi-search
    emacs-projectile
    emacs-sx ; stackexchange
    emacs-matrix-client))
