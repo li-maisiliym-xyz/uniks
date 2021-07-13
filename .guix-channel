@@ -6,8 +6,6 @@
    (name raizyn)
    (url "https://github.com/maisiliym/maisiliym")
    (branch "mein")
-   (commit
-    "709b30bd06e6562e121643fd106ee2c861f1e94e")
    (introduction
     (make-channel-introduction
      "10362ca5c2044f91a4626948fd3a85b0ea6327e5"
@@ -26,8 +24,6 @@
    (name guix-home-manager)
    (url "https://framagit.org/tyreunom/guix-home-manager.git")
    (branch "master")
-   (commit
-    "7567a9b1dd5606de5dd105ba6b8bf2591017eb64")
    (introduction
     (make-channel-introduction
      "b5f32950a8fa9c05efb27a0014f9b336bb318d69"
@@ -36,8 +32,7 @@
   (channel
    (name nonguix)
    (url "https://gitlab.com/nonguix/nonguix")
-   (commit
-    "935a9e4f124589e9c4989497d9d4f0d3e5f4c2f4")
+   (commit "935a9e4f124589e9c4989497d9d4f0d3e5f4c2f4")
    (introduction
     (make-channel-introduction
      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
