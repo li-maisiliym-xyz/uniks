@@ -3,6 +3,7 @@
 	     (oop goops)
 	     (srfi srfi-1)
 	     (guix gexp)
+	     ((guix store) #:select (%default-substitute-urls))
 	     (gnu services)
 	     (gnu services base)
 	     (gnu services pm)
@@ -51,7 +52,7 @@
       (inherit config)
       (substitute-urls
        (append
-	%guix-substitute-urls ; To be removed
+	%default-substitute-urls ; To be removed
 	(->substitute-urls metaneksys)))
       (authorized-keys
        (append
@@ -100,37 +101,38 @@
      (remove-members %setuid-programs %unwanted-setuid-programs))))
 
 (define-method (->os (rairyn <raizyn>))
-  (define neksys (->neksys raizyn))
-  (define host-name (->neim neksys))
-  (define kernel-arguments
-    (cons "intel_pstate=disable" %default-kernel-arguments))
-  (define ssh-service
-    (define authorized-keys
-      (->authorized-keys neksys krimynz))
-    (service openssh-service-type
-	     (openssh-configuration
-	      (openssh openssh-sans-x)
-	      (password-authentication? #false)
-	      (permit-root-login 'without-password)
-	      (authorized-keys authorized-keys))))
-  (define services (cons* ssh-service %edj-services))
-  (define packages (append %uniks-base-packages))
-  (define users
-    (append (->os-users krimynz) %base-user-accounts))
-  (define bootloader (->bootloader neksys))
-  (define swap-devices (->swap-devices neksys))
-  (define file-systems (cons* (->file-systems neksys) %base-file-systems))
-  
-  (operating-system
-    (locale "en_US.utf8")
-    (timezone "Asia/Bangkok")
-    (kernel-arguments kernel-arguments)
-    (keyboard-layout (keyboard-layout "us" "colemak"))
-    (host-name host-name)
-    (users users)
-    (packages packages)
-    (services services)
-    (setuid-programs %uniks-setuid-programs)
-    (bootloader bootloader)
-    (swap-devices swap-devices)
-    (file-systems file-systems)))
+  (let*
+      ((neksys (->neksys raizyn))
+       (host-name (->neim neksys))
+       (kernel-arguments
+	(cons "intel_pstate=disable" %default-kernel-arguments))
+       (authorized-keys (->authorized-keys neksys krimynz))
+       (ssh-service
+	(service
+	 openssh-service-type
+	 (openssh-configuration
+	  (openssh openssh-sans-x)
+	  (password-authentication? #false)
+	  (permit-root-login 'without-password)
+	  (authorized-keys authorized-keys))))
+       (services (cons* ssh-service %edj-services))
+       (packages (append %uniks-base-packages))
+       (users
+	(append (->os-users krimynz) %base-user-accounts))
+       (bootloader (->bootloader neksys))
+       (swap-devices (->swap-devices neksys))
+       (file-systems (cons* (->file-systems neksys) %base-file-systems)))
+    
+    (operating-system
+      (locale "en_US.utf8")
+      (timezone "Asia/Bangkok")
+      (kernel-arguments kernel-arguments)
+      (keyboard-layout (keyboard-layout "us" "colemak"))
+      (host-name host-name)
+      (users users)
+      (packages packages)
+      (services services)
+      (setuid-programs %uniks-setuid-programs)
+      (bootloader bootloader)
+      (swap-devices swap-devices)
+      (file-systems file-systems))))
