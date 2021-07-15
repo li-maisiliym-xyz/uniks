@@ -20,20 +20,42 @@
 	     (gnu services avahi)
 	     ((gnu system file-systems) #:select (%elogind-file-systems file-system))
 	     (gnu system)
-	     (gnu system shadow)
-	     (gnu system pam)
-	     (gnu packages glib)
-	     (gnu packages admin)
-	     (gnu packages networking)  
-	     (gnu packages suckless)
-	     (gnu packages wm)
-	     (gnu packages linux)
-	     (gnu packages shells)
-	     (gnu packages dvtm)
-             (gnu packages abduco)
-	     (gnu packages rsync)
-             (gnu packages rust-apps)
-	     (gnu packages cryptsetup))
+	     (gnu system accounts)
+	     (gnu system pam))
+
+(define-method (->os-user (name <string>)(trost <integer>))
+  (let* ((kor-groups (list "video"))
+	 (min-groups '())
+	 (med-groups (list "netdev" "audio"))
+	 (max-groups
+	  (cons med-groups (list "wheel")))
+	 (trost-groups
+	  (match trost
+	    (3 max-groups)
+	    (2 med-groups)
+	    (1 min-groups)
+	    (0 '())))
+	 (supplementary-groups
+	  (append trost-groups
+		  kor-groups))
+	 (home-directory
+	  (append "/home/" name))
+	 (shell (file-append zsh "/bin/zsh")))
+    (user-account
+     (name name)
+     (group "users")
+     (home-directory home-directory)
+     (shell shell)
+     (supplementary-groups supplementary-groups))))
+
+(define-method (->os-users (krimynz <list>))
+  (map ->os-user krimynz))
+
+(define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
+  '())
+
+(define-method (->substitute-urls (metaneksys <metaneksys>))
+  '())
 
 (define-method (->services (spici <string>) (saiz <integer>))
   (let*

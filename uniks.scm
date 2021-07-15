@@ -81,18 +81,7 @@
 
 (define-method (->prikriom (krimyn <krimyn>)
 			   (neksys <neksys>))
-  (define prikriomz (->prikriomz krimyn))
-  (define neksys-neim (->neim neksys))
-  (assq-ref prikriomz neksys-neim))
-
-(define-method (->os-user (krimyn <krimyn>))
-  (#f))
-
-(define-method (->os-users (krimynz <list>))
-  (map ->os-user krimynz))
-
-(define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
-  '())
-
-(define-method (->substitute-urls (metaneksys <metaneksys>))
-  '())
+  (let*
+      ((prikriomz (->prikriomz krimyn))
+       (neksys-neim (->neim neksys)))
+    (assq-ref prikriomz neksys-neim)))
