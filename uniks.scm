@@ -1,8 +1,9 @@
 (define-module (uniks))
 (use-modules (oop goops))
 (export <prikriom> <krimyn>
-	 <raizyn> <metaneksys>
-	 <neksys>)
+	<raizyn> <metaneksys> <neksys>
+	->substitute-urls ->prikriom
+	->os-user ->os-users ->authorized-keys)
 
 (define-class <raizyn> ()
   (metaneksiz #:init-keyword #:metaneksiz
@@ -91,4 +92,7 @@
   (map ->os-user krimynz))
 
 (define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
-  (#f))
+  '())
+
+(define-method (->substitute-urls (metaneksys <metaneksys>))
+  '())
