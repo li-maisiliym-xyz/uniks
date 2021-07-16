@@ -27,12 +27,12 @@
 (define coleremak-drv
   (origin->derivation
    (origin
-    (method git-fetch)
-    (uri (git-reference
-          (url "https://github.com/maisiliym/coleremak")
-          (commit "ffe10ed51234728b5f29f574a7768d7f427487f2")))
-    (sha256
-     (base32 "0wnjl269y01hnd41r78h6h564j99236n27izmprs2c07f9pv2g08")))))
+     (method git-fetch)
+     (uri (git-reference
+           (url "https://github.com/maisiliym/coleremak")
+           (commit "ffe10ed51234728b5f29f574a7768d7f427487f2")))
+     (sha256
+      (base32 "0wnjl269y01hnd41r78h6h564j99236n27izmprs2c07f9pv2g08")))))
 
 (define coleremak
   (make <deriveicyn> #:inyr coleremak-drv))
@@ -105,10 +105,10 @@
 
 (define-method (->home (raizyn <raizyn>))
   (define krimyn (->kimyn raizyn))
+  (define prineksys (->prineksys raizyn))
   (define neksys (->neksys raizyn))
-  (define metaneksys (->metaneksys raizyn))
-  (define neksys-neim (->neim neksys))
-  (define prikriom (->prikriom krimyn neksys-neim))
+  (define prineksys-neim (->neim prineksys))
+  (define prikriom (->prikriom krimyn prineksys-neim))
   
   (define data-directory (string-append "/home/." (->neim krimyn)))
   
@@ -126,7 +126,7 @@
        ("init"
 	(("defaultBranch" "mein"))) 
        ("user"
-	(("email" ,(->email krimyn metaneksys))
+	(("email" ,(->email krimyn neksys))
 	 ("name" ,(->neim krimyn))
 	 ("signingKey" ,(string-append "&" (->keygrip prikriom)))))
        ("ghq"

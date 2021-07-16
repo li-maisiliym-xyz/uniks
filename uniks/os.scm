@@ -4,7 +4,7 @@
 	     (uniks packages)
 	     (oop goops)
 	     (ice-9 match)
-	     (srfi srfi-1)
+	     ;; (srfi srfi-1)
 	     (guix gexp)
 	     ((guix store) #:select (%default-substitute-urls))
 	     (gnu services)
@@ -48,11 +48,11 @@
 (define-method (->os-users (krimynz <list>))
   (map ->os-user krimynz))
 
-(define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
-  (let* ()
+(define-method (->authorized-keys (prineksys <prineksys>) (krimynz <list>))
+  (let* (())
     ()))
 
-(define-method (->substitute-urls (metaneksys <metaneksys>))
+(define-method (->substitute-urls (neksys <neksys>))
   (let* ()
     ()))
 
@@ -90,13 +90,13 @@
     (authorized-keys ssh-authorized-keys))))
 
 (define-method (->services (spici <string>) (saiz <integer>)
-			   (metaneksys-substitute-urls <list>)
-			   (metaneksys-guix-keys <list>)
+			   (neksys-substitute-urls <list>)
+			   (neksys-guix-keys <list>)
 			   (ssh-authorized-keys <list>))
   (let*
       ((stock-services (->services spici saiz))
-       (substitute-urls (append %default-substitute-urls metaneksys-substitute-urls))
-       (guix-authorized-keys (append %default-authorized-guix-keys metaneksys-guix-keys))
+       (substitute-urls (append %default-substitute-urls neksys-substitute-urls))
+       (guix-authorized-keys (append %default-authorized-guix-keys neksys-guix-keys))
        (ssh-service (->ssh-service ssh-authorized-keys))
        (base-services (list ssh-service))
        (modified-stock-services (modify-services stock-services
@@ -108,32 +108,32 @@
 				  (authorized-keys guix-authorized-keys))))))
     (append base-services modified-stock-services)))
 
-(define-method (->kernel-arguments (neksys <neksys>))
+(define-method (->kernel-arguments (prineksys <prineksys>))
   (cons "intel_pstate=disable" %default-kernel-arguments))
 
 (define-method (->os (raizyn <raizyn>))
   (let*
-      ((neksys (->neksys raizyn))
-       (neksys-spici (->spici <string>))
-       (neksys-saiz (->saiz <string>))
+      ((prineksys (->prineksys raizyn))
+       (prineksys-spici (->spici <string>))
+       (prineksys-saiz (->saiz <string>))
        (krimynz (->krimynz raizyn))
-       (host-name (->neim neksys))
-       (kernel-arguments (->kernel-arguments neksys))
-       (authorized-keys (->authorized-keys neksys krimynz))
-       (metaneksys-substitute-urls (->substitute-urls metaneksys))
-       (metaneksys-guix-keys (->guix-keys metaneksys))
-       (ssh-authorized-keys (->authorized-keys neksys krimynz))
-       (services (->services neksys-spici neksys-saiz
-			     metaneksys-substitute-urls
-			     metaneksys-guix-keys
+       (host-name (->neim prineksys))
+       (kernel-arguments (->kernel-arguments prineksys))
+       (authorized-keys (->authorized-keys prineksys krimynz))
+       (neksys-substitute-urls (->substitute-urls neksys))
+       (neksys-guix-keys (->guix-keys neksys))
+       (ssh-authorized-keys (->authorized-keys prineksys krimynz))
+       (services (->services prineksys-spici prineksys-saiz
+			     neksys-substitute-urls
+			     neksys-guix-keys
 			     ssh-authorized-keys ))
-       (packages (->packages neksys-spici neksys-saiz))
+       (packages (->packages prineksys-spici prineksys-saiz))
        (users
 	(append (->os-users krimynz) %base-user-accounts))
-       (setuid-programs (->setuid-programs neksys-spici neksys-saiz))
-       (bootloader (->bootloader neksys))
-       (swap-devices (->swap-devices neksys))
-       (file-systems (append (->file-systems neksys) %base-file-systems)))
+       (setuid-programs (->setuid-programs prineksys-spici prineksys-saiz))
+       (bootloader (->bootloader prineksys))
+       (swap-devices (->swap-devices prineksys))
+       (file-systems (append (->file-systems prineksys) %base-file-systems)))
 
     (operating-system
       (locale "en_US.utf8")

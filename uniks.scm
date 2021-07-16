@@ -1,34 +1,34 @@
 (define-module (uniks))
 (use-modules (oop goops))
 (export <prikriom> <krimyn>
-	<raizyn> <metaneksys> <neksys>
+	<raizyn> <neksys> <prineksys>
 	->substitute-urls ->prikriom
 	->os-user ->os-users ->authorized-keys)
 
 (define-class <raizyn> ()
-  (metaneksiz #:init-keyword #:metaneksiz
-	      #:getter ->metaneksiz
-	      #:setter <-metaneksiz)
-  (metaneksys #:init-keyword #:metaneksys
-	      #:getter ->metaneksys
-	      #:setter <-metaneksys)
-  (neksys #:init-keyword #:neksys
-	  #:getter ->neksys
-	  #:setter <-neksys)
-  (krimyn #:init-keyword #:krimyn
-	  #:getter ->krimyn
-	  #:setter <-krimyn)
   (neksiz #:init-keyword #:neksiz
 	  #:getter ->neksiz
 	  #:setter <-neksiz)
+  (neksys #:init-keyword #:neksys
+	  #:getter ->neksys
+	  #:setter <-neksys)
+  (prineksiz #:init-keyword #:prineksiz
+	     #:getter ->prineksiz
+	     #:setter <-prineksiz)
+  (prineksys #:init-keyword #:prineksys
+	     #:getter ->prineksys
+	     #:setter <-prineksys)
   (krimynz #:init-keyword #:krimynz
 	   #:getter ->krimynz
-	   #:setter <-krimynz))
+	   #:setter <-krimynz)
+  (krimyn #:init-keyword #:krimyn
+	  #:getter ->krimyn
+	  #:setter <-krimyn))
 
 (define-class <prikriom> ()
-  (ful #:init-keyword #:ful
-       #:getter ->ful
-       #:setter <-ful)
+  (pidjipi #:init-keyword #:pidjipi
+	   #:getter ->pidjipi
+	   #:setter <-pidjipi)
   (ssh #:init-keyword #:ssh
        #:getter ->ssh
        #:setter <-ssh)
@@ -50,11 +50,11 @@
 	#:getter ->saiz
 	#:setter <-saiz)
   (prikriomz #:init-keyword #:prikriomz
-	     ;; #:type (alist-of (<neksys-neim> . <prikriom)>)
+	     ;; #:type (alist-of (<prineksys-neim> . <prikriom)>)
 	     #:getter ->prikriomz
 	     #:setter <-prikriomz))
 
-(define-class <neksys> ()
+(define-class <prineksys> ()
   (neim #:init-keyword #:neim
 	#:getter ->neim
 	#:setter <-neim)
@@ -71,7 +71,7 @@
 	    #:getter ->prikriom
 	    #:setter <-prikriom))
 
-(define-class <metaneksys> ()
+(define-class <neksys> ()
   (neim #:init-keyword #:neim
 	#:getter ->neim
 	#:setter <-neim)
@@ -80,8 +80,8 @@
 	 #:setter <-trost) )
 
 (define-method (->prikriom (krimyn <krimyn>)
-			   (neksys <neksys>))
+			   (prineksys <prineksys>))
   (let*
       ((prikriomz (->prikriomz krimyn))
-       (neksys-neim (->neim neksys)))
-    (assq-ref prikriomz neksys-neim)))
+       (prineksys-neim (->neim prineksys)))
+    (assq-ref prikriomz prineksys-neim)))
