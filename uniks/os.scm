@@ -23,23 +23,20 @@
 	     (gnu system accounts)
 	     (gnu system pam))
 
-(define-method (->os-user (name <string>)(trost <integer>))
-  (let* ((kor-groups (list "video"))
-	 (min-groups '())
-	 (med-groups (list "netdev" "audio"))
-	 (max-groups
-	  (cons med-groups (list "wheel")))
-	 (trost-groups
+(define-method (->os-user (krimyn <krimyn>))
+  (let* ((name (->neim krimyn))
+	 (trost (->trost krimyn))
+	 (kor-groups (list "video"))
+	 (min-groups (append kor-groups '()))
+	 (med-groups (append (list "netdev" "audio")))
+	 (max-groups (append med-groups (list "wheel")))
+	 (supplementary-group
 	  (match trost
 	    (3 max-groups)
 	    (2 med-groups)
 	    (1 min-groups)
-	    (0 '())))
-	 (supplementary-groups
-	  (append trost-groups
-		  kor-groups))
-	 (home-directory
-	  (append "/home/" name))
+	    (0 kor-groups)))
+	 (home-directory (append "/home/" name))
 	 (shell (file-append zsh "/bin/zsh")))
     (user-account
      (name name)
@@ -52,10 +49,12 @@
   (map ->os-user krimynz))
 
 (define-method (->authorized-keys (neksys <neksys>) (krimynz <list>))
-  '())
+  (let* ()
+    ()))
 
 (define-method (->substitute-urls (metaneksys <metaneksys>))
-  '())
+  (let* ()
+    ()))
 
 (define-method (->services (spici <string>) (saiz <integer>))
   (let*
@@ -67,15 +66,19 @@
 		   (cpu-scaling-governor-on-bat '("powersave"))
 		   (cpu-scaling-governor-on-ac '("powersave"))))))
        (unwanted-services
-	(list avahi-service-type
-	      gdm-service-type))
+	(list avahi-service-type gdm-service-type))
        (sentyr-services '())
-       (edj-services (list (service sddm-service-type)))
-       (haibrid-services (append sentyr-services edj-services)))
-    (match spici
-      ("sentyr" sentyr-services)
-      ("haibrid" haibrid-services)
-      ("edj" edj-services))))
+       (edj-services
+	(append %desktop-services
+		(list (service sddm-service-type))))
+       (haibrid-services (append sentyr-services edj-services))
+       (unfiltered-spici-services
+	(match spici
+	  ("sentyr" sentyr-services)
+	  ("haibrid" haibrid-services)
+	  ("edj" edj-services)))
+       (spici-services (remove unfiltered-spici-services unwanted-services)))
+    (append kor-services spici-services)))
 
 (define-method (->ssh-service (authorized-keys <list>))
   (service
@@ -108,7 +111,7 @@
 (define-method (->kernel-arguments (neksys <neksys>))
   (cons "intel_pstate=disable" %default-kernel-arguments))
 
-(define-method (->os (rairyn <raizyn>))
+(define-method (->os (raizyn <raizyn>))
   (let*
       ((neksys (->neksys raizyn))
        (neksys-spici (->spici <string>))
@@ -131,7 +134,7 @@
        (bootloader (->bootloader neksys))
        (swap-devices (->swap-devices neksys))
        (file-systems (append (->file-systems neksys) %base-file-systems)))
-    
+
     (operating-system
       (locale "en_US.utf8")
       (timezone "Asia/Bangkok")
