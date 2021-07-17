@@ -23,7 +23,7 @@
 	     (gnu system accounts)
 	     (gnu system pam))
 
-(define-method (->os-user (krimyn <krimyn>))
+(define-method (->user-account (krimyn <krimyn>))
   (let* ((name (->neim krimyn))
 	 (trost (->trost krimyn))
 	 (kor-groups (list "video"))
@@ -45,12 +45,56 @@
      (shell shell)
      (supplementary-groups supplementary-groups))))
 
-(define-method (->os-users (krimynz <list>))
-  (map ->os-user krimynz))
+(define-method (->users (krimynz <list>))
+  (map ->user-account krimynz))
 
-(define-method (->authorized-keys (prineksys <prineksys>) (krimynz <list>))
-  (let* (())
-    ()))
+(define-class <ssh-user> ()
+  (user #:init-keyword #:user
+	#:getter ->user
+	#:setter <-user)
+  (sshz #:init-keyword #:sshz
+	#:getter ->sshz
+	#:setter <-sshz))
+
+(define-method (->ssh-user
+		(prineksys-neim <string>) (krimyn <krimyn>))
+  (let*
+      ((prikriomz (->prikriomz krimyn))
+       (exprineksiz-prikriomz (assoc-remove! prikriomz prineksys-neim))
+       (user (->neim krimyn))
+       (sshz (map ->ssh exprineksiz-prikriomz))
+       (result (make <ssh-user>
+		 #:user user
+		 #:sshz sshz)))
+    result))
+
+(define-method (->ssh-users
+		(prineksys-neim <string>) (krimynz <list>))
+  (let*
+      ((->ssh-user*
+	(lambda (krimyn)
+	  (->ssh-user prineksys-neim krimyn)))
+       (result (map ->ssh-user* krimynz)))
+    result))
+
+(define-method (->ssh-authorized-keys (ssh-user <ssh-user>))
+  (let* ((username (->username ssh-user))
+	 (file-name (string-append username ".pub"))
+	 (sshz-string (newline-strings sshz))
+	 (sshz-file
+	  (plain-file file-name sshz-string))
+	 (result (list username plain-file)))
+    result))
+
+(define-method (->ssh-authorized-keys (ssh-users <list>))
+  (let* ((result (map ->ssh-authorized-keys ssh-users)))
+    result))
+
+(define-method (->ssh-authorized-keys (prineksys-neim <string>)
+				      (krimynz <list>))
+  (let* ((ssh-users (->ssh-users prineksys-neim krimynz))
+	 (result (->ssh-authorized-keys ssh-users)))
+    result))
 
 (define-method (->substitute-urls (neksys <neksys>))
   (let* ()
@@ -119,17 +163,16 @@
        (krimynz (->krimynz raizyn))
        (host-name (->neim prineksys))
        (kernel-arguments (->kernel-arguments prineksys))
-       (authorized-keys (->authorized-keys prineksys krimynz))
        (neksys-substitute-urls (->substitute-urls neksys))
        (neksys-guix-keys (->guix-keys neksys))
-       (ssh-authorized-keys (->authorized-keys prineksys krimynz))
+       (ssh-authorized-keys (->ssh-authorized-keys prineksys krimynz))
        (services (->services prineksys-spici prineksys-saiz
 			     neksys-substitute-urls
 			     neksys-guix-keys
 			     ssh-authorized-keys ))
        (packages (->packages prineksys-spici prineksys-saiz))
        (users
-	(append (->os-users krimynz) %base-user-accounts))
+	(append (->users krimynz) %base-user-accounts))
        (setuid-programs (->setuid-programs prineksys-spici prineksys-saiz))
        (bootloader (->bootloader prineksys))
        (swap-devices (->swap-devices prineksys))
