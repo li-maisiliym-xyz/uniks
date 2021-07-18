@@ -23,6 +23,15 @@
 	     (gnu system accounts)
 	     (gnu system pam))
 
+(define-class <os-config> ()
+  (hostname #:init-keyword #:hostname
+	    #:getter ->hostname
+	    #:setter <-hostname)
+  (users-config #:init-keyword #:users-config
+		#:getter ->users-config
+		#:setter <-users-config)
+  )
+
 (define-method (->user-account (krimyn <krimyn>))
   (let* ((name (->neim krimyn))
 	 (trost (->trost krimyn))
@@ -154,42 +163,36 @@
 				    (authorized-keys guix-authorized-keys))))))
     (append base-services modified-stock-services)))
 
-(define-method (->kernel-arguments (prineksys <prineksys>))
+(define-method (->kernel-arguments (os-config <os-config>))
   (cons "intel_pstate=disable" %default-kernel-arguments))
 
-(define-method (->os (kriyraizyn <kriyraizyn>))
+(define-method (->os (os-config <os-config>))
   (let*
-      ((prineksys (->prineksys kriyraizyn))
-       (prineksys-spici (->spici <string>))
-       (prineksys-saiz (->saiz <string>))
-       (krimynz (->krimynz kriyraizyn))
-       (host-name (->neim prineksys))
-       (kernel-arguments (->kernel-arguments prineksys))
-       (neksys-substitute-urls (->substitute-urls neksys))
-       (neksys-guix-keys (->guix-keys neksys))
-       (ssh-authorized-keys (->ssh-authorized-keys prineksys krimynz))
-       (services (->services prineksys-spici prineksys-saiz
-			     neksys-substitute-urls
-			     neksys-guix-keys
-			     ssh-authorized-keys ))
-       (packages (->packages prineksys-spici prineksys-saiz))
-       (users
-	(append (->users krimynz) %base-user-accounts))
-       (setuid-programs (->setuid-programs prineksys-spici prineksys-saiz))
-       (bootloader (->bootloader prineksys))
-       (swap-devices (->swap-devices prineksys))
-       (file-systems (append (->file-systems prineksys) %base-file-systems)))
-
+      ((disks (->disks os-config)))
     (operating-system
       (locale "en_US.utf8")
       (timezone "Asia/Bangkok")
-      (kernel-arguments kernel-arguments)
+      (kernel-arguments (->kernel-arguments os-config))
       (keyboard-layout (keyboard-layout "us" "colemak"))
-      (host-name host-name)
-      (users users)
-      (packages packages)
-      (services services)
-      (setuid-programs setuid-programs)
-      (bootloader bootloader)
-      (swap-devices swap-devices)
-      (file-systems file-systems))))
+      (host-name (->hostname os-config))
+      (users (->users users-config))
+      (packages (->packages os-config))
+      (services (->services os-config))
+      (setuid-programs (->setuid-programs os-config))
+      (bootloader (->bootloader os-config))
+      (swap-devices (->swap-devices disks))
+      (file-systems (->file-systems disks)))))
+
+(define-method (->os-config (kriyraizyn <kriyraizyn>) )
+  (let*
+      ((orydjin (->orydjin kriyraizyn))
+       (prineksys (->prineksys kriyraizyn orydjin))
+       (krimynz (->krimynz kriyraizyn)))
+    (make <os-config>
+      #:spici (->spici prineksys)
+      #:saiz (->saiz prineksys)
+      #:hostname (->prineksys-neim orydjin)
+      #:users-config (->users-config krimynz)
+      #:disks (->disks os-config)
+      #:guix-config (->guix-config kriyraizyn)
+      #:network-config (->network-config kriyraizyn))))

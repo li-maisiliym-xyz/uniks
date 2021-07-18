@@ -12,7 +12,11 @@
   (neksiz #:init-keyword #:neksiz
 	  ;; #:type (alist-of (<neksys-neim> . <neksiz>))
 	  #:getter ->neksiz
-	  #:setter <-neksiz))
+	  #:setter <-neksiz)
+  (trost #:init-keyword #:trost
+	 ;; #:type (alist-of (<neksys-neim> . <trost>))
+	 #:getter ->trost
+	 #:setter <-trost))
 
 (define-class <orydjin> ()
   (neksys-neim #:init-keyword #:neksys-neim
@@ -50,10 +54,7 @@
 	 ;; #:type <spici>
 	 #:getter ->spici
 	 #:setter <-spici)
-  (trost #:init-keyword #:trost
-	 ;; #:type <trost>
-	 #:getter ->trost
-	 #:setter <-trost)
+  
   (saiz #:init-keyword #:saiz
 	;; #:type <saiz>
 	#:getter ->saiz
@@ -69,7 +70,7 @@
 	 #:getter ->spici
 	 #:setter <-spici)
   (trost #:init-keyword #:trost
-	 ;; #:type <trost>
+	 ;; #:type (alist-of (krimyn-neim . <trost>))
 	 #:getter ->trost
 	 #:setter <-trost)
   (saiz #:init-keyword #:saiz
@@ -83,6 +84,7 @@
 
 (define-class <neksys> ()
   (trost #:init-keyword #:trost
+	 ;; #:type (alist-of (<=prineksys-neim> . <trost>))
 	 #:getter ->trost
 	 #:setter <-trost)
   (prineksiz #:init-keyword #:prineksiz
