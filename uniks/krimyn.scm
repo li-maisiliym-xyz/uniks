@@ -101,12 +101,12 @@
   (local-file "wofi/style.css"))
 
 (define-method ->home (krimyn <krimyn>)
-  (->home (<-krimyn last-raizyn krimyn)))
+  (->home (<-krimyn last-kriyraizyn krimyn)))
 
-(define-method (->home (raizyn <raizyn>))
-  (define krimyn (->kimyn raizyn))
-  (define prineksys (->prineksys raizyn))
-  (define neksys (->neksys raizyn))
+(define-method (->home (kriyraizyn <kriyraizyn>))
+  (define krimyn (->kimyn kriyraizyn))
+  (define prineksys (->prineksys kriyraizyn))
+  (define neksys (->neksys kriyraizyn))
   (define prineksys-neim (->neim prineksys))
   (define prikriom (->prikriom krimyn prineksys-neim))
   
@@ -277,7 +277,6 @@
    emacs-orgit
    emacs-doom-modeline emacs-doom-themes
    emacs-deadgrep
-   ;; emacs-treemacs ; testing dired
    emacs-dired-hacks
    emacs-dired-sidebar
    emacs-diredfl

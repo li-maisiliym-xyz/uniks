@@ -97,8 +97,8 @@
     result))
 
 (define-method (->substitute-urls (neksys <neksys>))
-  (let* ()
-    ()))
+  (let* ((var #f))
+    '()))
 
 (define-method (->services (spici <string>) (saiz <integer>))
   (let*
@@ -129,7 +129,7 @@
    openssh-service-type
    (openssh-configuration
     (openssh openssh-sans-x)
-    (password-authentication? #false)
+    (password-authentication? #f)
     (permit-root-login 'prohibit-password)
     (authorized-keys ssh-authorized-keys))))
 
@@ -139,28 +139,30 @@
 			   (ssh-authorized-keys <list>))
   (let*
       ((stock-services (->services spici saiz))
-       (substitute-urls (append %default-substitute-urls neksys-substitute-urls))
-       (guix-authorized-keys (append %default-authorized-guix-keys neksys-guix-keys))
+       (substitute-urls
+	(append %default-substitute-urls neksys-substitute-urls))
+       (guix-authorized-keys
+	(append %default-authorized-guix-keys neksys-guix-keys))
        (ssh-service (->ssh-service ssh-authorized-keys))
        (base-services (list ssh-service))
        (modified-stock-services (modify-services stock-services
-				(guix-service-type
-				 config =>
-				 (guix-configuration
-				  (inherit config)
-				  (substitute-urls substitute-urls)
-				  (authorized-keys guix-authorized-keys))))))
+				  (guix-service-type
+				   config =>
+				   (guix-configuration
+				    (inherit config)
+				    (substitute-urls substitute-urls)
+				    (authorized-keys guix-authorized-keys))))))
     (append base-services modified-stock-services)))
 
 (define-method (->kernel-arguments (prineksys <prineksys>))
   (cons "intel_pstate=disable" %default-kernel-arguments))
 
-(define-method (->os (raizyn <raizyn>))
+(define-method (->os (kriyraizyn <kriyraizyn>))
   (let*
-      ((prineksys (->prineksys raizyn))
+      ((prineksys (->prineksys kriyraizyn))
        (prineksys-spici (->spici <string>))
        (prineksys-saiz (->saiz <string>))
-       (krimynz (->krimynz raizyn))
+       (krimynz (->krimynz kriyraizyn))
        (host-name (->neim prineksys))
        (kernel-arguments (->kernel-arguments prineksys))
        (neksys-substitute-urls (->substitute-urls neksys))

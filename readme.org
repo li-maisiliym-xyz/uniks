@@ -6,3 +6,10 @@ dialect. It aims to provide a /correct/ runtime for
 [[hob:krios][kriOS]] using linux. It can be thought of
 as an evolved version of [[hob:guix][guix]], which is used
 for the bootstrap version.
+
+* Notes
+** Guile shortcomings
+Slot types are commented out since guile's MOP is incomplete,
+lacking slot-types (which really disqualifies it from being called a MOP),
+and skiim's =define-datom=, which would not currently type-check the slot,
+fails to evaluate due to another guile bug.
