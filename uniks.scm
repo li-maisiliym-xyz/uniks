@@ -46,10 +46,6 @@
 	   #:setter <-keygrip))
 
 (define-class <krimyn> ()
-  (neim #:init-keyword #:neim
-	;; #:type <neim>
-	#:getter ->neim
-	#:setter <-neim)
   (spici #:init-keyword #:spici
 	 ;; #:type <spici>
 	 #:getter ->spici
@@ -68,10 +64,6 @@
 	     #:setter <-prikriomz))
 
 (define-class <prineksys> ()
-  (neim #:init-keyword #:neim
-	;; #:type <neim>
-	#:getter ->neim
-	#:setter <-neim)
   (spici #:init-keyword #:spici
 	 ;; #:type <spici>
 	 #:getter ->spici
@@ -90,9 +82,6 @@
 	    #:setter <-prikriom))
 
 (define-class <neksys> ()
-  (neim #:init-keyword #:neim
-	#:getter ->neim
-	#:setter <-neim)
   (trost #:init-keyword #:trost
 	 #:getter ->trost
 	 #:setter <-trost)
@@ -103,9 +92,44 @@
 	   #:getter ->krimynz
 	   #:setter <-krimynz))
 
-(define-method (->prikriom (krimyn <krimyn>)
-			   (prineksys <prineksys>))
+(define-method (->neim (krimyn <krimyn>)
+		       (neksys <neksys>))
   (let*
-      ((prikriomz (->prikriomz krimyn))
-       (prineksys-neim (->neim prineksys)))
-    (assq-ref prikriomz prineksys-neim)))
+      ((krimynz (->krimynz neksys))
+       (prikriomz (->prikriomz krimyn))
+       (same-prikriomz?
+	(lambda (neim-krimyn-pair)
+	  (let* ((compared-krimyn (cdr neim-krimyn-pair))
+		 (compared-prikriomz (->prikriomz compared-krimyn)))
+	    (equal? (->prikriomz neim-krimyn-pair) prikriomz))))
+       (neim-value (filter same-prikriomz? krimynz)))
+    (car neim-value)))
+
+(define-method (->neim (krimyn <krimyn>)
+		       (orydjin <orydjin>)
+		       (kriyraizyn <kriyraizyn>))
+  (let*
+      ((neksys-neim (->neksys-neim orydjin))
+       (neksys (assq-ref kriyraizyn neksys-neim)))
+    (->neim krimyn neksys)))
+
+(define-method (->neim (prineksys <prineksys>)
+		       (neksys <neksys>))
+  (let*
+      ((prineksiz (->prineksiz prineksys))
+       (prikriom (->prikriom prineksys))
+       (same-prikriom?
+	(lambda (neim-prineksys-pair)
+	  (let* ((compared-prineksys (cdr neim-prineksys-pair))
+		 (compared-prikriom (->prikriom compared-prineksys)))
+	    (equal? (->prikriom neim-prineksys-pair) prikriom))))
+       (neim-value (filter same-prikriom? prineksiz)))
+    (car neim-value)))
+
+(define-method (->neim (prineksys <prineksys>)
+		       (orydjin <orydjin>)
+		       (kriyraizyn <kriyraizyn>))
+  (let*
+      ((neksys-neim (->neksys-neim orydjin))
+       (neksys (assq-ref kriyraizyn neksys-neim)))
+    (->neim prineksys neksys)))
