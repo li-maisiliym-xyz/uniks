@@ -4,36 +4,42 @@
 	<kriyraizyn> <neksys> <prineksys>
 	->prikriom)
 
+(define-class <trost> ()
+  (self #:init-keyword #:self
+	;; #:type <u2>
+	#:getter ->self
+	#:setter <-self)
+  (sobtrosts #:init-keyword #:sobtrosts
+	     ;; #:type (alist-of (<neksys-neim> . <sobtrosts>))
+	     #:getter ->sobtrosts
+	     #:setter <-sobtrosts))
+
 (define-class <kriyraizyn> ()
   (orydjin #:init-keyword #:orydjin
 	   ;; #:type <orydjin>
 	   #:getter ->orydjin
 	   #:setter <-orydjin)
   (neksiz #:init-keyword #:neksiz
-	  ;; #:type (alist-of (<neksys-neim> . <neksiz>))
+	  ;; #:type (list-of <neksiz>)
 	  #:getter ->neksiz
-	  #:setter <-neksiz)
-  (trost #:init-keyword #:trost
-	 ;; #:type (alist-of (<neksys-neim> . <trost>))
-	 #:getter ->trost
-	 #:setter <-trost))
+	  #:setter <-neksiz))
 
 (define-class <orydjin> ()
-  (neksys-neim #:init-keyword #:neksys-neim
-	       ;; #:type <neksys-neim>
-	       #:getter ->neksys-neim
-	       #:setter <-neksys-neim
-	       #:init-value #f)
-  (prineksys-neim #:init-keyword #:prineksys-neim
-		  ;; #:type <prineksys-neim>
-		  #:getter ->prineksys-neim
-		  #:setter <-prineksys-neim
-		  #:init-value #f)
-  (krimyn-neim #:init-keyword #:krimyn-neim
-	       ;; #:type <krimyn-neim>
-	       #:getter ->krimyn-neim
-	       #:setter <-krimyn-neim
-	       #:init-value #f))
+  (neksys #:init-keyword #:neksys
+	  ;; #:type <neksys>
+	  #:getter ->neksys
+	  #:setter <-neksys
+	  #:init-value #f)
+  (prineksys #:init-keyword #:prineksys
+	     ;; #:type <prineksys>
+	     #:getter ->prineksys
+	     #:setter <-prineksys
+	     #:init-value #f)
+  (krimyn #:init-keyword #:krimyn
+	  ;; #:type <krimyn>
+	  #:getter ->krimyn
+	  #:setter <-krimyn
+	  #:init-value #f))
 
 (define-class <prikriom> ()
   (pidjipi #:init-keyword #:pidjipi
@@ -50,6 +56,10 @@
 	   #:setter <-keygrip))
 
 (define-class <krimyn> ()
+  (neim #:init-keyword #:neim
+	;; #:type <neim>
+	#:getter ->neim
+	#:setter <-neim)
   (spici #:init-keyword #:spici
 	 ;; #:type <krimyn-spici>
 	 #:getter ->spici
@@ -59,11 +69,49 @@
 	#:getter ->saiz
 	#:setter <-saiz)
   (prikriomz #:init-keyword #:prikriomz
-	     ;; #:type (alist-of (<prineksys-neim> . <prikriom>))
+	     ;; #:type (list-of (<prineksys-neim> . <prikriom>))
 	     #:getter ->prikriomz
 	     #:setter <-prikriomz))
 
+
+(define-class <neksys> ()
+  (neim #:init-keyword #:neim
+	;; #:type <neim>
+	#:getter ->neim
+	#:setter <-neim)
+  (trost #:init-keyword #:trost
+	 ;; #:type <trost>
+	 #:getter ->trost
+	 #:setter <-trost)
+  (sobneksys #:init-keyword #:sobneksys
+	     #:getter ->sobneksys
+	     #:setter <-sobneksys))
+
+(define-class <sobneksys> ()
+  (prineksiz #:init-keyword #:prineksiz
+	     ;; #:type (list-of <prineksys>)
+	     #:getter ->prineksiz
+	     #:setter <-prineksiz)
+  (krimynz #:init-keyword #:krimynz
+	   ;; #:type (list-of <krimyn>)
+	   #:getter ->krimynz
+	   #:setter <-krimynz))
+
 (define-class <prineksys> ()
+  (neim #:init-keyword #:neim
+	;; #:type <neim>
+	#:getter ->neim
+	#:setter <-neim)
+  (trost #:init-keyword #:trost
+	 ;; #:type <trost>
+	 #:getter ->trost
+	 #:setter <-trost)
+  (sobprineksys #:init-keyword #:sobprineksys
+	 ;; #:type <sobprineksys>
+	 #:getter ->sobprineksys
+	 #:setter <-sobprineksys)))
+
+(define-class <sobprineksys> ()
   (spici #:init-keyword #:spici
 	 ;; #:type <prineksys-spici>
 	 #:getter ->spici
@@ -80,57 +128,3 @@
 	    ;; #:type <prikriom>
 	    #:getter ->prikriom
 	    #:setter <-prikriom))
-
-(define-class <neksys> ()
-  (trost #:init-keyword #:trost
-	 ;; #:type (alist-of (<=prineksys-neim> . <trost>))
-	 #:getter ->trost
-	 #:setter <-trost)
-  (prineksiz #:init-keyword #:prineksiz
-	     #:getter ->prineksiz
-	     #:setter <-prineksiz)
-  (krimynz #:init-keyword #:krimynz
-	   #:getter ->krimynz
-	   #:setter <-krimynz))
-
-(define-method (->neim (krimyn <krimyn>)
-		       (neksys <neksys>))
-  (let*
-      ((krimynz (->krimynz neksys))
-       (prikriomz (->prikriomz krimyn))
-       (same-prikriomz?
-	(lambda (neim-krimyn-pair)
-	  (let* ((compared-krimyn (cdr neim-krimyn-pair))
-		 (compared-prikriomz (->prikriomz compared-krimyn)))
-	    (equal? (->prikriomz neim-krimyn-pair) prikriomz))))
-       (neim-value (filter same-prikriomz? krimynz)))
-    (car neim-value)))
-
-(define-method (->neim (krimyn <krimyn>)
-		       (kriyraizyn <kriyraizyn>))
-  (let*
-      ((orydjin (->orydjin kriyraizyn))
-       (neksys-neim (->neksys-neim orydjin))
-       (neksys (assq-ref kriyraizyn neksys-neim)))
-    (->neim krimyn neksys)))
-
-(define-method (->neim (prineksys <prineksys>)
-		       (neksys <neksys>))
-  (let*
-      ((prineksiz (->prineksiz prineksys))
-       (prikriom (->prikriom prineksys))
-       (same-prikriom?
-	(lambda (neim-prineksys-pair)
-	  (let* ((compared-prineksys (cdr neim-prineksys-pair))
-		 (compared-prikriom (->prikriom compared-prineksys)))
-	    (equal? (->prikriom neim-prineksys-pair) prikriom))))
-       (neim-value (filter same-prikriom? prineksiz)))
-    (car neim-value)))
-
-(define-method (->neim (prineksys <prineksys>)
-		       (kriyraizyn <kriyraizyn>))
-  (let*
-      ((orydjin (->orydjin kriyraizyn))
-       (neksys-neim (->neksys-neim orydjin))
-       (neksys (assq-ref kriyraizyn neksys-neim)))
-    (->neim prineksys neksys)))
