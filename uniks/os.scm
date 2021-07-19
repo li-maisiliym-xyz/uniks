@@ -28,7 +28,7 @@
 	    #:getter ->hostname
 	    #:setter <-hostname)
   (users-config #:init-keyword #:users-config
-		#:getter ->users-config
+		#:getter ->user-configz
 		#:setter <-users-config)
   )
 
@@ -140,12 +140,9 @@
     (openssh openssh-sans-x)
     (password-authentication? #f)
     (permit-root-login 'prohibit-password)
-    (authorized-keys ssh-authorized-keys))))
+    (authorized-keys authorized-keys))))
 
-(define-method (->services (spici <string>) (saiz <integer>)
-			   (neksys-substitute-urls <list>)
-			   (neksys-guix-keys <list>)
-			   (ssh-authorized-keys <list>))
+(define-method (->services (os-config <os-config>))
   (let*
       ((stock-services (->services spici saiz))
        (substitute-urls
@@ -183,16 +180,37 @@
       (swap-devices (->swap-devices disks))
       (file-systems (->file-systems disks)))))
 
+(define-method (->user-config prineksys-trost neim.krimyn)
+  (let*
+      ((neim (car neim.krimyn))
+       (krimyn (cdr neim.krimyn))
+       (trost (assoc prineksys-trost neim))
+       (authorized-keys )
+       )
+    (make <user-config>
+      #:name neim
+      #:spici (->spici krimyn)
+      #:saiz (->saiz krimyn)
+      #:trost trost
+      #:authorized-keys authorized-keys)))
+
+(define-method (->disks))
+(define-method (->guix-config))
+(define-method (->network-config))
+
 (define-method (->os-config (kriyraizyn <kriyraizyn>) )
   (let*
       ((orydjin (->orydjin kriyraizyn))
        (prineksys (->prineksys kriyraizyn orydjin))
-       (krimynz (->krimynz kriyraizyn)))
+       (prineksys-trost (->trost prineksys))
+       (krimynz (->krimynz kriyraizyn))
+       (user-configz
+	(map (->user-config prineksys-trost) krimynz)))
     (make <os-config>
       #:spici (->spici prineksys)
       #:saiz (->saiz prineksys)
       #:hostname (->prineksys-neim orydjin)
-      #:users-config (->users-config krimynz)
+      #:users-config (->user-configz krimynz)
       #:disks (->disks os-config)
       #:guix-config (->guix-config kriyraizyn)
       #:network-config (->network-config kriyraizyn))))

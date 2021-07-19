@@ -37,24 +37,23 @@
 
 (define-class <prikriom> ()
   (pidjipi #:init-keyword #:pidjipi
-	   ;; #:type <orydjin>
+	   ;; #:type <pidjipi>
 	   #:getter ->pidjipi
 	   #:setter <-pidjipi)
   (ssh #:init-keyword #:ssh
-       ;; #:type <orydjin>
+       ;; #:type <ssh>
        #:getter ->ssh
        #:setter <-ssh)
   (keygrip #:init-keyword #:keygrip
-	   ;; #:type <orydjin>
+	   ;; #:type <keygrip>
 	   #:getter ->keygrip
 	   #:setter <-keygrip))
 
 (define-class <krimyn> ()
   (spici #:init-keyword #:spici
-	 ;; #:type <spici>
+	 ;; #:type <krimyn-spici>
 	 #:getter ->spici
 	 #:setter <-spici)
-  
   (saiz #:init-keyword #:saiz
 	;; #:type <saiz>
 	#:getter ->saiz
@@ -66,7 +65,7 @@
 
 (define-class <prineksys> ()
   (spici #:init-keyword #:spici
-	 ;; #:type <spici>
+	 ;; #:type <prineksys-spici>
 	 #:getter ->spici
 	 #:setter <-spici)
   (trost #:init-keyword #:trost
@@ -108,10 +107,10 @@
     (car neim-value)))
 
 (define-method (->neim (krimyn <krimyn>)
-		       (orydjin <orydjin>)
 		       (kriyraizyn <kriyraizyn>))
   (let*
-      ((neksys-neim (->neksys-neim orydjin))
+      ((orydjin (->orydjin kriyraizyn))
+       (neksys-neim (->neksys-neim orydjin))
        (neksys (assq-ref kriyraizyn neksys-neim)))
     (->neim krimyn neksys)))
 
@@ -129,9 +128,9 @@
     (car neim-value)))
 
 (define-method (->neim (prineksys <prineksys>)
-		       (orydjin <orydjin>)
 		       (kriyraizyn <kriyraizyn>))
   (let*
-      ((neksys-neim (->neksys-neim orydjin))
+      ((orydjin (->orydjin kriyraizyn))
+       (neksys-neim (->neksys-neim orydjin))
        (neksys (assq-ref kriyraizyn neksys-neim)))
     (->neim prineksys neksys)))
