@@ -1,6 +1,7 @@
 (define-module (uniks os))
 (use-modules (uniks utils)
 	     (uniks packages)
+	     (giiks formats)
 	     (oop goops)
 	     (ice-9 match)
 	     ;; (srfi srfi-1)
@@ -30,13 +31,15 @@
   (user-configs #:init-keyword #:user-configs #:getter ->user-configs #:setter user-configs!)
   (substitute-urls #:init-keyword #:substitute-urls #:getter ->substitute-urls #:setter substitute-urls!)
   (disks #:init-keyword #:disks #:getter ->disks #:setter disks!)
-  (swap-disks #:init-keyword #:swap-disks #:getter ->swap-disks #:setter swap-disks!))
+  (arch #:init-keyword #:arch #:getter ->arch #:setter arch!)
+  (swap-disks #:init-keyword #:swap-disks #:getter ->swap-disks #:setter swap-disks!)
+  (->guix-authorized-keys #:init-keyword #:->guix-authorized-keys #:getter ->->guix-authorized-keys #:setter ->guix-authorized-keys!))
 
 (define-class <user-config> ()
   (name #:init-keyword #:name #:getter ->name #:setter name!)
   (spici #:init-keyword #:spici #:getter ->spici #:setter spici!)
   (saiz #:init-keyword #:saiz #:getter ->saiz #:setter saiz!)
-  (sshz #:init-keyword #:sshz #:getter ->user-configz #:setter sshz!)
+  (sshz #:init-keyword #:sshz #:getter ->sshz #:setter sshz!)
   (pgp #:init-keyword #:pgp #:getter ->pgp #:setter pgp!)
   (keygrip #:init-keyword #:keygrip #:getter ->keygrip #:setter keygrip!)
   (akses #:init-keyword #:akses #:getter ->akses #:setter akses!))
@@ -48,7 +51,7 @@
 	 (min-groups (append kor-groups '()))
 	 (med-groups (append (list "netdev" "audio")))
 	 (max-groups (append med-groups (list "wheel")))
-	 (supplementary-group
+	 (supplementary-groups
 	  (match akses
 	    (3 max-groups)
 	    (2 med-groups)
@@ -75,9 +78,9 @@
 	  (plain-file file-name sshz-string)))
     (list username plain-file)))
 
-(define-method (->ssh-authorized-keys (users <list>))
+(define-method (->ssh-authorized-keys (user-configs <list>))
   (let*
-      ((result (map ->ssh-authorized-keys ssh-users)))
+      ((result (map ->ssh-authorized-keys user-configs)))
     result))
 
 (define-method (->services (spici <string>) (saiz <integer>))
