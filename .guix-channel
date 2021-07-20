@@ -1,5 +1,6 @@
 (channel
  (version 0)
+ (directory "guile-modules")
  (dependencies
   (channel
    (name 'giiks)

@@ -44,7 +44,7 @@
       ("haibrid" haibrid-packages)
       ("edj" edj-packages))))
 
-(define-method (->setuid-programs (saiz <integer>) (spici <string>))
+(define-method (->setuid-programs (spici <string>) (saiz <integer>))
   (let* ((unwanted-guix-setuid-programs
 	  (list (file-append inetutils "/bin/ping")
 		(file-append inetutils "/bin/ping6")))

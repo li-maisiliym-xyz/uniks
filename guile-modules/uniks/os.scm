@@ -32,15 +32,24 @@
 		#:setter <-users-config)
   )
 
-(define-method (->user-account (krimyn <krimyn>))
-  (let* ((name (->neim krimyn))
-	 (trost (->trost krimyn))
+(define-class <os-config> ()
+  (hostname #:init-keyword #:hostname
+	    #:getter ->hostname
+	    #:setter <-hostname)
+  (users-config #:init-keyword #:users-config
+		#:getter ->user-configz
+		#:setter <-users-config)
+  )
+
+(define-method (->user-account (user-config <user-config>))
+  (let* ((name (->neim user-config))
+	 (akses (->akses user-config))
 	 (kor-groups (list "video"))
 	 (min-groups (append kor-groups '()))
 	 (med-groups (append (list "netdev" "audio")))
 	 (max-groups (append med-groups (list "wheel")))
 	 (supplementary-group
-	  (match trost
+	  (match akses
 	    (3 max-groups)
 	    (2 med-groups)
 	    (1 min-groups)
@@ -54,60 +63,22 @@
      (shell shell)
      (supplementary-groups supplementary-groups))))
 
-(define-method (->users (krimynz <list>))
-  (map ->user-account krimynz))
+(define-method (->users (user-configs <list>))
+  (map ->user-account user-configs))
 
-(define-class <ssh-user> ()
-  (user #:init-keyword #:user
-	#:getter ->user
-	#:setter <-user)
-  (sshz #:init-keyword #:sshz
-	#:getter ->sshz
-	#:setter <-sshz))
-
-(define-method (->ssh-user
-		(prineksys-neim <string>) (krimyn <krimyn>))
-  (let*
-      ((prikriomz (->prikriomz krimyn))
-       (exprineksiz-prikriomz (assoc-remove! prikriomz prineksys-neim))
-       (user (->neim krimyn))
-       (sshz (map ->ssh exprineksiz-prikriomz))
-       (result (make <ssh-user>
-		 #:user user
-		 #:sshz sshz)))
-    result))
-
-(define-method (->ssh-users
-		(prineksys-neim <string>) (krimynz <list>))
-  (let*
-      ((->ssh-user*
-	(lambda (krimyn)
-	  (->ssh-user prineksys-neim krimyn)))
-       (result (map ->ssh-user* krimynz)))
-    result))
-
-(define-method (->ssh-authorized-keys (ssh-user <ssh-user>))
-  (let* ((username (->username ssh-user))
+(define-method (->ssh-authorized-keys (user <user-config>))
+  (let* ((username (->neim user))
+	 (sshz (->sshz user))
 	 (file-name (string-append username ".pub"))
 	 (sshz-string (newline-strings sshz))
 	 (sshz-file
-	  (plain-file file-name sshz-string))
-	 (result (list username plain-file)))
-    result))
+	  (plain-file file-name sshz-string)))
+    (list username plain-file)))
 
-(define-method (->ssh-authorized-keys (ssh-users <list>))
-  (let* ((result (map ->ssh-authorized-keys ssh-users)))
+(define-method (->ssh-authorized-keys (users <list>))
+  (let*
+      ((result (map ->ssh-authorized-keys ssh-users)))
     result))
-
-(define-method (->ssh-authorized-keys (prineksys-neim <string>)
-				      (krimynz <list>))
-  (let* ((ssh-users (->ssh-users prineksys-neim krimynz))
-	 (result (->ssh-authorized-keys ssh-users)))
-    result))
-
-(define-method (->substitute-urls (neksys <neksys>))
-  (let* ((var #f))
-    '()))
 
 (define-method (->services (spici <string>) (saiz <integer>))
   (let*
@@ -120,7 +91,7 @@
 		   (cpu-scaling-governor-on-ac '("powersave"))))))
        (unwanted-services
 	(list avahi-service-type gdm-service-type))
-       (sentyr-services '())
+       (sentyr-services %base-services)
        (edj-services
 	(append %desktop-services
 		(list (service sddm-service-type))))
@@ -142,13 +113,16 @@
     (permit-root-login 'prohibit-password)
     (authorized-keys authorized-keys))))
 
-(define-method (->services (os-config <os-config>))
+(define-method (->services (os-config <os-config>)
+			   (spici <string>) (saiz <integer>)
+			   (user-configs <list>))
   (let*
       ((stock-services (->services spici saiz))
        (substitute-urls
 	(append %default-substitute-urls neksys-substitute-urls))
        (guix-authorized-keys
 	(append %default-authorized-guix-keys neksys-guix-keys))
+       (ssh-authorized-keys (->ssh-authorized-keys user-configs))
        (ssh-service (->ssh-service ssh-authorized-keys))
        (base-services (list ssh-service))
        (modified-stock-services (modify-services stock-services
@@ -163,54 +137,43 @@
 (define-method (->kernel-arguments (os-config <os-config>))
   (cons "intel_pstate=disable" %default-kernel-arguments))
 
+(define-method (->file-systems (os-config <os-config>))
+  (let ((disks (->disks os-config)))
+    (append disks %base-file-systems)))
+
+(define-method (->keyboard-layout (os-config <os-config>))
+  (keyboard-layout "us" "colemak"))
+
+(define-method (->keyboard-layout (os-config <os-config>))
+  (keyboard-layout "us" "colemak"))
+
+(define-method (->swap-devices (os-config <os-config>))
+  (->swap-disks os-config))
+
 (define-method (->os (os-config <os-config>))
   (let*
-      ((disks (->disks os-config)))
+      ((spici (->spici os-config))
+       (saiz (->saiz os-config))
+       (user-configs (->user-configs os-config))
+       (locale "en_US.utf8")
+       (timezone "Asia/Bangkok")
+       (keyboard-layout (->keyboard-layout os-config))
+       (bootloader
+	(bootloader-configuration
+	 (bootloader grub-efi-bootloader)
+	 (target "/boot/efi")
+	 (keyboard-layout keyboard-layout))))
+    
     (operating-system
-      (locale "en_US.utf8")
-      (timezone "Asia/Bangkok")
+      (locale locale)
+      (timezone timezone)
       (kernel-arguments (->kernel-arguments os-config))
-      (keyboard-layout (keyboard-layout "us" "colemak"))
+      (keyboard-layout keyboard-layout)
       (host-name (->hostname os-config))
-      (users (->users users-config))
-      (packages (->packages os-config))
-      (services (->services os-config))
-      (setuid-programs (->setuid-programs os-config))
-      (bootloader (->bootloader os-config))
-      (swap-devices (->swap-devices disks))
-      (file-systems (->file-systems disks)))))
-
-(define-method (->user-config prineksys-trost neim.krimyn)
-  (let*
-      ((neim (car neim.krimyn))
-       (krimyn (cdr neim.krimyn))
-       (trost (assoc prineksys-trost neim))
-       (authorized-keys )
-       )
-    (make <user-config>
-      #:name neim
-      #:spici (->spici krimyn)
-      #:saiz (->saiz krimyn)
-      #:trost trost
-      #:authorized-keys authorized-keys)))
-
-(define-method (->disks))
-(define-method (->guix-config))
-(define-method (->network-config))
-
-(define-method (->os-config (kriyraizyn <kriyraizyn>) )
-  (let*
-      ((orydjin (->orydjin kriyraizyn))
-       (prineksys (->prineksys kriyraizyn orydjin))
-       (prineksys-trost (->trost prineksys))
-       (krimynz (->krimynz kriyraizyn))
-       (user-configz
-	(map (->user-config prineksys-trost) krimynz)))
-    (make <os-config>
-      #:spici (->spici prineksys)
-      #:saiz (->saiz prineksys)
-      #:hostname (->prineksys-neim orydjin)
-      #:users-config (->user-configz krimynz)
-      #:disks (->disks os-config)
-      #:guix-config (->guix-config kriyraizyn)
-      #:network-config (->network-config kriyraizyn))))
+      (users (->users user-configs))
+      (packages (->packages spici saiz))
+      (services (->services os-config spici saiz user-configs))
+      (setuid-programs (->setuid-programs spici saiz))
+      (bootloader bootloader)
+      (swap-devices (->swap-devices os-config))
+      (file-systems (->file-systems os-config)))))
