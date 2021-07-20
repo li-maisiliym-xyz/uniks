@@ -16,7 +16,9 @@
 	     (gnu packages rsync)
              (gnu packages rust-apps)
 	     (gnu packages cryptsetup))
-(export ->packages ->setuid-programs)
+(export ->packages ->setuid-programs user-shell)
+
+(define user-shell (file-append zsh "/bin/zsh"))
 
 (define-method (->packages (spici <string>) (saiz <integer>))
   (let* ((%unwanted-guix-packages (list inetutils))

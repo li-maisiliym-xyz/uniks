@@ -1,6 +1,5 @@
 (define-module (uniks os))
-(use-modules (uniks)
-	     (uniks utils)
+(use-modules (uniks utils)
 	     (uniks packages)
 	     (oop goops)
 	     (ice-9 match)
@@ -24,25 +23,26 @@
 	     (gnu system pam))
 
 (define-class <os-config> ()
-  (hostname #:init-keyword #:hostname
-	    #:getter ->hostname
-	    #:setter <-hostname)
-  (users-config #:init-keyword #:users-config
-		#:getter ->user-configz
-		#:setter <-users-config)
-  )
+  (name #:init-keyword #:name #:getter ->name #:setter name!)
+  (domain #:init-keyword #:domain #:getter ->domain #:setter domain!)
+  (spici #:init-keyword #:spici #:getter ->spici #:setter spici!)
+  (saiz #:init-keyword #:saiz #:getter ->saiz #:setter saiz!)
+  (user-configs #:init-keyword #:user-configs #:getter ->user-configs #:setter user-configs!)
+  (substitute-urls #:init-keyword #:substitute-urls #:getter ->substitute-urls #:setter substitute-urls!)
+  (disks #:init-keyword #:disks #:getter ->disks #:setter disks!)
+  (swap-disks #:init-keyword #:swap-disks #:getter ->swap-disks #:setter swap-disks!))
 
-(define-class <os-config> ()
-  (hostname #:init-keyword #:hostname
-	    #:getter ->hostname
-	    #:setter <-hostname)
-  (users-config #:init-keyword #:users-config
-		#:getter ->user-configz
-		#:setter <-users-config)
-  )
+(define-class <user-config> ()
+  (name #:init-keyword #:name #:getter ->name #:setter name!)
+  (spici #:init-keyword #:spici #:getter ->spici #:setter spici!)
+  (saiz #:init-keyword #:saiz #:getter ->saiz #:setter saiz!)
+  (sshz #:init-keyword #:sshz #:getter ->user-configz #:setter sshz!)
+  (pgp #:init-keyword #:pgp #:getter ->pgp #:setter pgp!)
+  (keygrip #:init-keyword #:keygrip #:getter ->keygrip #:setter keygrip!)
+  (akses #:init-keyword #:akses #:getter ->akses #:setter akses!))
 
 (define-method (->user-account (user-config <user-config>))
-  (let* ((name (->neim user-config))
+  (let* ((name (->name user-config))
 	 (akses (->akses user-config))
 	 (kor-groups (list "video"))
 	 (min-groups (append kor-groups '()))
@@ -55,7 +55,7 @@
 	    (1 min-groups)
 	    (0 kor-groups)))
 	 (home-directory (append "/home/" name))
-	 (shell (file-append zsh "/bin/zsh")))
+	 (shell user-shell))
     (user-account
      (name name)
      (group "users")
@@ -67,7 +67,7 @@
   (map ->user-account user-configs))
 
 (define-method (->ssh-authorized-keys (user <user-config>))
-  (let* ((username (->neim user))
+  (let* ((username (->name user))
 	 (sshz (->sshz user))
 	 (file-name (string-append username ".pub"))
 	 (sshz-string (newline-strings sshz))
@@ -119,23 +119,27 @@
   (let*
       ((stock-services (->services spici saiz))
        (substitute-urls
-	(append %default-substitute-urls neksys-substitute-urls))
+	(append %default-substitute-urls (->substitute-urls os-config)))
        (guix-authorized-keys
-	(append %default-authorized-guix-keys neksys-guix-keys))
-       (ssh-authorized-keys (->ssh-authorized-keys user-configs))
-       (ssh-service (->ssh-service ssh-authorized-keys))
-       (base-services (list ssh-service))
-       (modified-stock-services (modify-services stock-services
-				  (guix-service-type
-				   config =>
-				   (guix-configuration
-				    (inherit config)
-				    (substitute-urls substitute-urls)
-				    (authorized-keys guix-authorized-keys))))))
-    (append base-services modified-stock-services)))
+	(append %default-authorized-guix-keys (->guix-authorized-keys os-config)))
+	(ssh-authorized-keys (->ssh-authorized-keys user-configs))
+	(ssh-service (->ssh-service ssh-authorized-keys))
+	(base-services (list ssh-service))
+	(modified-stock-services (modify-services stock-services
+						  (guix-service-type
+						   config =>
+						   (guix-configuration
+						    (inherit config)
+						    (substitute-urls substitute-urls)
+						    (authorized-keys guix-authorized-keys))))))
+       (append base-services modified-stock-services)))
 
 (define-method (->kernel-arguments (os-config <os-config>))
-  (cons "intel_pstate=disable" %default-kernel-arguments))
+  (let
+      ((arch-arguments
+	(match (->arch os-config)
+	  ("intel" '("intel_pstate=disable")))))
+    (append arch-arguments  %default-kernel-arguments)))
 
 (define-method (->file-systems (os-config <os-config>))
   (let ((disks (->disks os-config)))
@@ -143,12 +147,6 @@
 
 (define-method (->keyboard-layout (os-config <os-config>))
   (keyboard-layout "us" "colemak"))
-
-(define-method (->keyboard-layout (os-config <os-config>))
-  (keyboard-layout "us" "colemak"))
-
-(define-method (->swap-devices (os-config <os-config>))
-  (->swap-disks os-config))
 
 (define-method (->os (os-config <os-config>))
   (let*
@@ -165,15 +163,15 @@
 	 (keyboard-layout keyboard-layout))))
     
     (operating-system
-      (locale locale)
-      (timezone timezone)
-      (kernel-arguments (->kernel-arguments os-config))
-      (keyboard-layout keyboard-layout)
-      (host-name (->hostname os-config))
-      (users (->users user-configs))
-      (packages (->packages spici saiz))
-      (services (->services os-config spici saiz user-configs))
-      (setuid-programs (->setuid-programs spici saiz))
-      (bootloader bootloader)
-      (swap-devices (->swap-devices os-config))
-      (file-systems (->file-systems os-config)))))
+     (locale locale)
+     (timezone timezone)
+     (kernel-arguments (->kernel-arguments os-config))
+     (keyboard-layout keyboard-layout)
+     (host-name (->hostname os-config))
+     (users (->users user-configs))
+     (packages (->packages spici saiz))
+     (services (->services os-config spici saiz user-configs))
+     (setuid-programs (->setuid-programs spici saiz))
+     (bootloader bootloader)
+     (swap-devices (->swap-disks os-config))
+     (file-systems (->file-systems os-config)))))
