@@ -113,7 +113,7 @@
   (sobprineksys #:init-keyword #:sobprineksys
 	 ;; #:type <sobprineksys>
 	 #:getter ->sobprineksys
-	 #:setter sobprineksys!)))
+	 #:setter sobprineksys!))
 
 (define-class <sobprineksys> ()
   (spici #:init-keyword #:spici

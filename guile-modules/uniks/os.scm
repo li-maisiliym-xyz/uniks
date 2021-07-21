@@ -4,7 +4,8 @@
 	     (giiks formats)
 	     (oop goops)
 	     (ice-9 match)
-	     ;; (srfi srfi-1)
+	     (nongnu packages linux)
+             (nongnu system linux-initrd)
 	     (guix gexp)
 	     ((guix store) #:select (%default-substitute-urls))
 	     (gnu services)
@@ -82,7 +83,7 @@
 	 (sshz-string (newline-strings sshz))
 	 (sshz-file
 	  (plain-file file-name sshz-string)))
-    (list username plain-file)))
+    (list username sshz-file)))
 
 (define-method (->ssh-authorized-keys (user-configs <list>))
   (let*
@@ -99,15 +100,18 @@
 		   (cpu-scaling-governor-on-bat '("powersave"))
 		   (cpu-scaling-governor-on-ac '("powersave"))))))
        (unwanted-services
-	(list avahi-service-type gdm-service-type))
-       (sentyr-services %base-services)
+	(list avahi-service-type ;; gdm-service-type
+	      xorg-server-service-type
+	      ))
+       (sentyr-services '())
        (edj-services
 	(append %desktop-services
-		(list (service sddm-service-type))))
+		(list ;; (service sddm-service-type)
+		      )))
        (haibrid-services (append sentyr-services edj-services))
        (unfiltered-spici-services
 	(match spici
-	  ("sentyr" sentyr-services)
+	  ("sentyr" (append sentyr-services %base-services))
 	  ("haibrid" haibrid-services)
 	  ("edj" edj-services)))
        (spici-services (remove unfiltered-spici-services unwanted-services)))
@@ -131,17 +135,17 @@
 	(append %default-substitute-urls (->substitute-urls os-config)))
        (guix-authorized-keys
 	(append %default-authorized-guix-keys (->guix-authorized-keys os-config)))
-	(ssh-authorized-keys (->ssh-authorized-keys user-configs))
-	(ssh-service (->ssh-service ssh-authorized-keys))
-	(base-services (list ssh-service))
-	(modified-stock-services (modify-services stock-services
-						  (guix-service-type
-						   config =>
-						   (guix-configuration
-						    (inherit config)
-						    (substitute-urls substitute-urls)
-						    (authorized-keys guix-authorized-keys))))))
-       (append base-services modified-stock-services)))
+       (ssh-authorized-keys (->ssh-authorized-keys user-configs))
+       (ssh-service (->ssh-service ssh-authorized-keys))
+       (base-services (list ssh-service))
+       (modified-stock-services (modify-services stock-services
+				  (guix-service-type
+				   config =>
+				   (guix-configuration
+				    (inherit config)
+				    (substitute-urls substitute-urls)
+				    (authorized-keys guix-authorized-keys))))))
+    (append base-services modified-stock-services)))
 
 (define-method (->kernel-arguments (os-config <os-config>))
   (let
@@ -173,15 +177,18 @@
 	 (keyboard-layout keyboard-layout))))
     
     (operating-system
-     (locale locale)
-     (timezone timezone)
-     (kernel-arguments (->kernel-arguments os-config))
-     (keyboard-layout keyboard-layout)
-     (host-name (->name os-config))
-     (users (->users user-configs))
-     (packages (->packages spici saiz))
-     (services (->services os-config spici saiz user-configs))
-     (setuid-programs (->setuid-programs spici saiz))
-     (bootloader bootloader)
-     (swap-devices (->swap-disks os-config))
-     (file-systems (->file-systems os-config)))))
+      (locale locale)
+      (timezone timezone)
+      (kernel-arguments (->kernel-arguments os-config))
+      (kernel linux)
+      (initrd microcode-initrd)
+      (firmware (list linux-firmware))
+      (keyboard-layout keyboard-layout)
+      (host-name (->name os-config))
+      (users (->users user-configs))
+      (packages (->packages spici saiz))
+      (services (->services os-config spici saiz user-configs))
+      (setuid-programs (->setuid-programs spici saiz))
+      (bootloader bootloader)
+      (swap-devices (->swap-disks os-config))
+      (file-systems (->file-systems os-config)))))
