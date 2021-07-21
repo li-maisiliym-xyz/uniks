@@ -15,7 +15,9 @@
              (gnu packages abduco)
 	     (gnu packages rsync)
              (gnu packages rust-apps)
-	     (gnu packages cryptsetup))
+	     (gnu packages cryptsetup)
+	     (gnu packages ssh)
+	     #:re-export (openssh-sans-x))
 (export ->packages ->setuid-programs user-shell)
 
 (define user-shell (file-append zsh "/bin/zsh"))

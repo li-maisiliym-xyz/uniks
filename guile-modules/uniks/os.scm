@@ -18,8 +18,12 @@
 	     (gnu services networking)
 	     (gnu services sound)
 	     (gnu services avahi)
-	     ((gnu system file-systems) #:select (%elogind-file-systems file-system))
+	     (gnu bootloader)
+	     (gnu bootloader grub)
+	     ((gnu system file-systems)
+	      #:select (%base-file-systems file-system))
 	     (gnu system)
+	     (gnu system keyboard)
 	     (gnu system accounts)
 	     (gnu system pam))
 
@@ -33,16 +37,17 @@
   (disks #:init-keyword #:disks #:getter ->disks #:setter disks!)
   (arch #:init-keyword #:arch #:getter ->arch #:setter arch!)
   (swap-disks #:init-keyword #:swap-disks #:getter ->swap-disks #:setter swap-disks!)
-  (->guix-authorized-keys #:init-keyword #:->guix-authorized-keys #:getter ->->guix-authorized-keys #:setter ->guix-authorized-keys!))
+  (guix-authorized-keys #:init-keyword #:guix-authorized-keys #:getter ->guix-authorized-keys #:setter !guix-authorized-keys!))
 
 (define-class <user-config> ()
   (name #:init-keyword #:name #:getter ->name #:setter name!)
   (spici #:init-keyword #:spici #:getter ->spici #:setter spici!)
+  (akses #:init-keyword #:akses #:getter ->akses #:setter akses!)
   (saiz #:init-keyword #:saiz #:getter ->saiz #:setter saiz!)
   (sshz #:init-keyword #:sshz #:getter ->sshz #:setter sshz!)
   (pgp #:init-keyword #:pgp #:getter ->pgp #:setter pgp!)
   (keygrip #:init-keyword #:keygrip #:getter ->keygrip #:setter keygrip!)
-  (akses #:init-keyword #:akses #:getter ->akses #:setter akses!))
+  (github #:init-keyword #:github #:getter ->github #:setter github!))
 
 (define-method (->user-account (user-config <user-config>))
   (let* ((name (->name user-config))
@@ -141,7 +146,8 @@
   (let
       ((arch-arguments
 	(match (->arch os-config)
-	  ("intel" '("intel_pstate=disable")))))
+	  ("intel" '("intel_pstate=disable"))
+	  (_ '()))))
     (append arch-arguments  %default-kernel-arguments)))
 
 (define-method (->file-systems (os-config <os-config>))
@@ -170,7 +176,7 @@
      (timezone timezone)
      (kernel-arguments (->kernel-arguments os-config))
      (keyboard-layout keyboard-layout)
-     (host-name (->hostname os-config))
+     (host-name (->name os-config))
      (users (->users user-configs))
      (packages (->packages spici saiz))
      (services (->services os-config spici saiz user-configs))
