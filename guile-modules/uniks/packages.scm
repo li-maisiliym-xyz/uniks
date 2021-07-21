@@ -1,8 +1,12 @@
-(define-module (uniks packages))
+iff(define-module (uniks packages)
+  #:use-module ((gnu packages ssh) #:select (openssh-sans-x))
+  #:re-export (openssh-sans-x))
 (use-modules (uniks)
+	     (uniks utils)
 	     (oop goops)
-	     (srfi srfi-1)
+	     (ice-9 match)
 	     (guix gexp)
+	     ((gnu system) #:select (%setuid-programs %base-packages))
 	     ((gnu packages) #:select (specification->package))
 	     (gnu packages glib)
 	     (gnu packages admin)
@@ -16,21 +20,24 @@
 	     (gnu packages rsync)
              (gnu packages rust-apps)
 	     (gnu packages cryptsetup)
-	     (gnu packages ssh)
-	     #:re-export (openssh-sans-x))
+	     ((gnu packages ssh) #:select (openssh-sans-x))
+	     (gnu packages fonts))
 (export ->packages ->setuid-programs user-shell)
 
 (define user-shell (file-append zsh "/bin/zsh"))
 
 (define-method (->packages (spici <string>) (saiz <integer>))
-  (let* ((%unwanted-guix-packages (list inetutils))
+  (let* ((unwanted-base-packages (list inetutils))
+	 (base-packages
+	  (remove %base-packages unwanted-base-packages))
 	 (%kor-packages
-	  (list (specification->package "nss-certs")
-		mksh rsync cryptsetup))
+	  (append base-packages
+		  (list (specification->package "nss-certs")
+			mksh rsync cryptsetup)))
 	 (sentyr-packages '())
 	 (%kor-edj-packages
-	  (append %kor-edj-packages
-		 (list brightnessctl)))
+	  (append %kor-packages
+		 (list zsh brightnessctl)))
 	 (%min-edj-packages
 	  (append %kor-edj-packages
 		 (list sway swayidle swaylock alsa-utils )))
@@ -53,7 +60,7 @@
 	  (list (file-append inetutils "/bin/ping")
 		(file-append inetutils "/bin/ping6")))
 	 (filtered-guix-setuid-programs
-	  (remove filtered-guix-setuid-programs
+	  (remove %setuid-programs
 		  unwanted-guix-setuid-programs))
 	 (kor-setuid-programs
 	  (append filtered-guix-setuid-programs

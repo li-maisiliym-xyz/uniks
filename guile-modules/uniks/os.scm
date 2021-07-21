@@ -26,6 +26,7 @@
 	     (gnu system keyboard)
 	     (gnu system accounts)
 	     (gnu system pam))
+(export <os-config> <user-config> ->os)
 
 (define-class <os-config> ()
   (name #:init-keyword #:name #:getter ->name #:setter name!)
@@ -62,7 +63,7 @@
 	    (2 med-groups)
 	    (1 min-groups)
 	    (0 kor-groups)))
-	 (home-directory (append "/home/" name))
+	 (home-directory (string-append "/home/" name))
 	 (shell user-shell))
     (user-account
      (name name)
